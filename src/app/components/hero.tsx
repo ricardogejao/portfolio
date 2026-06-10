@@ -2,7 +2,6 @@ import { ArrowRight } from "lucide-react";
 import { motion } from "motion/react";
 import { Nav } from "./nav";
 import { FadeIn } from "./motion-primitives";
-import heroVideo from "../../imports/12149178_1920_1080_24fps.mp4";
 
 type Props = { onOpenAbout?: () => void };
 
@@ -11,16 +10,7 @@ const EASE = [0.2, 0, 0, 1] as const;
 export function Hero({ onOpenAbout }: Props = {}) {
   return (
     <section className="relative bg-[#111111] text-white overflow-hidden">
-      <video
-        aria-hidden
-        src={heroVideo}
-        autoPlay
-        muted
-        loop
-        playsInline
-        className="absolute inset-0 w-full h-full object-cover opacity-40 pointer-events-none"
-      />
-      <div aria-hidden className="absolute inset-0 bg-[#111111]/50 pointer-events-none" />
+<div aria-hidden className="absolute inset-0 bg-[#111111]/50 pointer-events-none" />
       <motion.div
         aria-hidden
         className="absolute inset-0 opacity-[0.07] pointer-events-none"
