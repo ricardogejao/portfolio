@@ -458,8 +458,8 @@ export function CaseStudy({ onBack }: Props) {
           className="max-w-[28ch] mx-auto text-center italic text-white tracking-[-0.015em] leading-[1.2]"
           style={{ fontSize: "clamp(1.75rem, 4.2vw, 3.25rem)", fontWeight: 400 }}
         >
-          "TELUS had a platform that worked — and a platform that couldn't scale.
-          My job was to change the layer underneath the features."
+          "TELUS had a product that worked and a platform that couldn't scale.
+          My job was to fix the layer underneath — before the product outgrew it."
         </blockquote>
       </section>
 
@@ -532,7 +532,7 @@ export function CaseStudy({ onBack }: Props) {
             {
               n: "04",
               t: "Security at a Crossroads",
-              d: "TELUS needed to deliver a compelling self-monitored security product before professional monitoring was ready. The gap between ambition and infrastructure was significant.",
+              d: "TELUS needed to deliver a compelling self-monitored security product before professional monitoring was ready. Device onboarding that should take 2–3 minutes was taking 8–10 minutes. Impatient users retrying the process caused back-end corruption — bricking devices and requiring factory resets or replacements.",
               highlight: true,
             },
           ].map((c) => (
@@ -562,6 +562,27 @@ export function CaseStudy({ onBack }: Props) {
               <div className="absolute bottom-0 left-10 md:left-14 right-10 md:right-14 h-px bg-white/20 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
             </div>
           ))}
+        </div>
+
+        {/* App store signal strip */}
+        <div className="mt-px bg-[#111111]">
+          <div className="grid md:grid-cols-3 gap-px bg-[#2A2A2A]">
+            <div className="bg-[#111111] px-10 md:px-14 py-10 flex flex-col gap-2">
+              <span className="font-bold text-white tracking-tight" style={{ fontSize: "clamp(1.75rem, 3vw, 2.5rem)" }}>23%</span>
+              <span className="text-white/45 leading-snug" style={{ fontSize: "0.8125rem" }}>of all negative App Store reviews cite device onboarding — the #1 complaint category</span>
+            </div>
+            <div className="bg-[#111111] px-10 md:px-14 py-10 flex flex-col gap-2">
+              <span className="font-bold text-white tracking-tight" style={{ fontSize: "clamp(1.75rem, 3vw, 2.5rem)" }}>★1.53</span>
+              <span className="text-white/45 leading-snug" style={{ fontSize: "0.8125rem" }}>average written-review rating on iOS — against an official store rating of ★4.7. Users who write are users who are stuck.</span>
+            </div>
+            <div className="bg-[#111111] px-10 md:px-14 py-10 flex flex-col gap-2">
+              <span className="font-bold text-white tracking-tight" style={{ fontSize: "clamp(1.75rem, 3vw, 2.5rem)" }}>56</span>
+              <span className="text-white/45 leading-snug" style={{ fontSize: "0.8125rem" }}>negative reviews analysed (May 2025 – May 2026). General frustration, camera reliability, and login/auth follow onboarding in volume.</span>
+            </div>
+          </div>
+          <p className="px-10 md:px-14 py-4 text-white/25" style={{ fontSize: "10px", letterSpacing: "0.04em", textTransform: "uppercase" }}>
+            App Store sentiment analysis · TELUS SmartHome+ · Android &amp; iOS · data as of 2026-05-27
+          </p>
         </div>
 
       </section>
@@ -740,6 +761,19 @@ export function CaseStudy({ onBack }: Props) {
           </p>
         </div>
 
+        {/* Leadership decision callout 2 — quality over date */}
+        <div className="relative mt-8 p-10 md:p-16 bg-[#111111] text-white border border-white/30">
+          <p className={`${sectionLabel} text-white/40 mb-6`} style={{ fontSize: "11px" }}>
+            Leadership Decision
+          </p>
+          <p
+            className="tracking-[-0.015em] leading-[1.25] max-w-[60ch]"
+            style={{ fontSize: "clamp(1.25rem, 2.2vw, 1.875rem)", fontWeight: 500 }}
+          >
+            When the security launch technically passed go/no-go criteria, I held the date anyway. The experience met the bar on paper — but it was cumbersome, and cumbersome at scale meant devices getting bricked and customers calling support. We slipped six days. It was the right call.
+          </p>
+        </div>
+
       </section>
 
       {/* 04 SOLUTION — B & C (dark) */}
@@ -758,7 +792,10 @@ export function CaseStudy({ onBack }: Props) {
             style={{ fontSize: "clamp(1.125rem, 1.7vw, 1.5rem)", fontWeight: 500 }}
           >
             When professional monitoring was delayed, DIY Security became a strategic
-            pivot. The scope was genuinely unclear.
+            pivot. The scope was genuinely unclear — and the pressure to ship was real.
+            The exec framing from the product workshop put it plainly: we were pouring
+            new customers into a leaky bucket, ignoring the hole at the bottom. The
+            answer wasn't to ship faster. It was to get the foundations right first.
           </p>
 
           <div className="grid md:grid-cols-2 gap-10 md:gap-16">
@@ -809,7 +846,9 @@ export function CaseStudy({ onBack }: Props) {
                 style={{ fontSize: "clamp(1rem, 1.3vw, 1.15rem)" }}
               >
                 Treat this as an enablement phase, not UI production. Establish
-                strategic foundations before executing screens.
+                strategic foundations before executing screens. And stop thinking
+                of pro-monitored security as a separate SKU — the foundations we
+                build here improve automations, energy, cameras, and everything else.
               </p>
 
               <div className="space-y-3">
@@ -879,8 +918,11 @@ export function CaseStudy({ onBack }: Props) {
 
           {/* Critical vs Informational notification tiers */}
           <div className="mt-28 md:mt-36">
-            <p className="uppercase tracking-[0.22em] text-white/40 mb-16 text-center" style={{ fontSize: "11px" }}>
+            <p className="uppercase tracking-[0.22em] text-white/40 mb-10 text-center" style={{ fontSize: "11px" }}>
               Critical vs. informational notification tiers
+            </p>
+            <p className="text-white/50 leading-relaxed max-w-[52ch] mx-auto text-center mb-16" style={{ fontSize: "clamp(0.9375rem, 1.1vw, 1rem)" }}>
+              If we keep showing persistent red banners for routine state changes, users learn to ignore them. Then a real emergency arrives — and they've been trained not to act.
             </p>
             <div className="pt-16 pb-8 overflow-visible">
               <NotificationTiers />
@@ -979,8 +1021,21 @@ export function CaseStudy({ onBack }: Props) {
             </div>
           </div>
 
+          {/* Leadership decision callout — Jarvis launch block */}
+          <div className="relative mt-32 md:mt-40 p-10 md:p-16 bg-[#111111] text-white border border-white/30">
+            <p className={`${sectionLabel} text-white/40 mb-6`} style={{ fontSize: "11px" }}>
+              Leadership Decision
+            </p>
+            <p
+              className="tracking-[-0.015em] leading-[1.25] max-w-[60ch]"
+              style={{ fontSize: "clamp(1.25rem, 2.2vw, 1.875rem)", fontWeight: 500 }}
+            >
+              When the product team declared Jarvis ready to ship to customers, I blocked the launch. The UX wasn't there. I drove creation of a formal go/no-go framework — and negotiated UX acceptance criteria directly into the Area 22 vendor contract.
+            </p>
+          </div>
+
           {/* Milestone callout */}
-          <div className="relative mt-32 md:mt-40 p-10 md:p-14 bg-[#111111] border border-white/40">
+          <div className="relative mt-12 p-10 md:p-14 bg-[#111111] border border-white/40">
             <div
               aria-hidden
               className="absolute top-0 left-0 w-1 h-full bg-white/80"
@@ -1161,6 +1216,37 @@ export function CaseStudy({ onBack }: Props) {
           <GenUIEmbed />
         </div>
 
+        {/* André quote — section closer */}
+        <div className="py-24 md:py-32 text-center border-t border-[#111111]/10">
+          <blockquote className="mx-auto" style={{ maxWidth: "760px" }}>
+            <p
+              className="leading-[1.1] text-[#111111]"
+              style={{
+                fontSize: "clamp(1.5rem, 3vw, 2.5rem)",
+                fontWeight: 700,
+                fontStyle: "italic",
+                letterSpacing: "-0.025em",
+              }}
+            >
+              "Whoever structures the narrative of a new vision wins strategic positioning.{" "}
+              <span style={{ color: "#111111", opacity: 0.3 }}>
+                This is the kind of moment that separates a Manager from a Senior Manager."
+              </span>
+            </p>
+            <p
+              className="mt-7 mx-auto text-[#111111]/45 leading-relaxed"
+              style={{
+                fontSize: "clamp(0.875rem, 1.2vw, 1rem)",
+                fontWeight: 400,
+                maxWidth: "48ch",
+                letterSpacing: "0.01em",
+              }}
+            >
+              André Bernardi · VP Product, TELUS · after Vancouver workshop
+            </p>
+          </blockquote>
+        </div>
+
       </section>
 
       {/* 05 RESULTS */}
@@ -1169,36 +1255,54 @@ export function CaseStudy({ onBack }: Props) {
           05 · Results
         </p>
 
+        {/* Jarvis EMT metrics strip */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-[#2A2A2A] mb-16 md:mb-20">
+          {[
+            { v: "83%", l: "Rated Jarvis 2.x a meaningful improvement over V1" },
+            { v: "76%", l: "Would continue using after the trial period" },
+            { v: "72%", l: "T2B likelihood to recommend" },
+            { v: "100%", l: "T2B ease of use for routine creation" },
+          ].map(({ v, l }) => (
+            <div key={v} className="bg-[#111111] px-8 py-10 flex flex-col gap-3">
+              <span className="font-bold text-white tracking-tight" style={{ fontSize: "clamp(2rem, 4vw, 3rem)" }}>{v}</span>
+              <span className="text-white/45 leading-snug" style={{ fontSize: "0.8125rem" }}>{l}</span>
+            </div>
+          ))}
+        </div>
+        <p className={`${sectionLabel} text-white/30 mb-16 md:mb-20 -mt-8`} style={{ fontSize: "10px" }}>
+          Jarvis 2.0 EMT · 57 participants · Feb 2026 · validated before 25% customer rollout
+        </p>
+
         {/* Milestone cards — 2 × 2 grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-24 md:mb-32">
           {[
             {
               eyebrow: "SDUI Foundation",
               accent: "#2A9CB5",
-              headline: "Platform scalability unlocked",
-              body: "A shared component system replaced device-specific implementations. New device launches now require backend configuration — not front-end engineering sprints.",
-              tag: "Shipped",
+              headline: "From custom builds to a shared capability model",
+              body: "A unified component system replaced device-specific engineering. Platform now covers lights, locks, sensors, thermostats, cameras, and water heaters — each added through backend configuration, not front-end engineering sprints.",
+              tag: "Shipped · Expanding",
             },
             {
               eyebrow: "DIY Security — September 2025",
               accent: "#E8A33D",
-              headline: "Self-monitored security brought to market",
-              body: "TELUS enabled a viable security offering before professional monitoring was commercially available — protecting business continuity and delivering real customer value.",
-              tag: "MVP Reached · Q1 2026 Rollout",
+              headline: "Security product at market before monitoring infrastructure existed",
+              body: "By treating the work as an enablement phase — establishing Home/Away logic, critical vs. informational notification tiers, and multi-user permission models before building screens — TELUS shipped self-monitored security in September 2025. Professional monitoring EMT target: August 2026.",
+              tag: "MVP Shipped · Pro-Monitor EMT Aug 2026",
             },
             {
               eyebrow: "Jarvis 2.0 — Early Market Testing",
               accent: "#30A46C",
-              headline: "AI operating layer in customers' hands",
-              body: "Conversational automation creation, device control, and context-aware onboarding shipped across all SmartHome+ entry points. GA planned H2 2026.",
-              tag: "Early Market Testing",
+              headline: "Conversational control shipped — validated by real users",
+              body: "Validated by 57 real users in Feb 2026 before wider rollout. Progression: 30 → 300 → 25% customer rollout. GA planned H2 2026. The product team originally wanted to ship earlier — the quality hold was the right call.",
+              tag: "Early Market Testing · EMT Validated",
             },
             {
-              eyebrow: "Generative UI — In Progress",
+              eyebrow: "Generative UI — Programme Commitment",
               accent: "#9B8EF8",
-              headline: "Signal-driven adaptation ready for pilot",
-              body: "GenUI framework validated through internal testing. Adaptive surface logic, intent signals, and guardrail system handed off for platform integration.",
-              tag: "In Development",
+              headline: "Concept became programme-level architecture decision",
+              body: "10 design principles defined and adopted as reference for all new features. Engineering squad dedicated to design systems — first for the programme. Vancouver workshop aligned engineering leads on GenUI as part of 2026 technical architecture. Targets set: +20% feature adoption, +15–20% onboarding completion, ≥75 NPS.",
+              tag: "Architecture Aligned · In Development",
             },
           ].map((r, i) => (
             <article
@@ -1264,10 +1368,11 @@ export function CaseStudy({ onBack }: Props) {
 
           <div className="grid md:grid-cols-2 gap-y-8 gap-x-12 md:gap-x-20">
             {[
+              "UX acceptance criteria negotiated into the Area 22 vendor contract — design standards became contractual, not advisory",
               "Cross-org operating model built between TELUS and external AI partner Area 22",
-              "UX governance introduced — design review process established for all Jarvis workstreams",
+              "UX governance introduced — mandatory design review process established for all Jarvis workstreams",
               "Design elevated from execution partner to strategic voice in platform architecture",
-              "8 designers, 3 major parallel workstreams, delivered without team breakdown",
+              "8 designers across 3 parallel workstreams — delivered without a single major re-scope or team breakdown",
             ].map((it, i) => (
               <div
                 key={it}
@@ -1293,16 +1398,17 @@ export function CaseStudy({ onBack }: Props) {
         {/* Metrics I would track */}
         <div>
           <p className={`${sectionLabel} text-white/40 mb-6`} style={{ fontSize: "11px" }}>
-            What I would measure post-launch
+            How I defined success
           </p>
           <p
             className="text-white/55 leading-relaxed max-w-[60ch] mb-8"
             style={{ fontSize: "0.9375rem" }}
           >
-            Metrics not owned at the time of writing, but the framing I would
-            recommend.
+            Before each workstream shipped, I worked with product and engineering to
+            align on the signals that would tell us if the design decisions were
+            working — not just if the feature launched.
           </p>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 mb-16">
             {[
               "Automation creation completion rate vs. pre-Jarvis baseline",
               "Onboarding time-to-first-value for new security customers",
@@ -1318,6 +1424,30 @@ export function CaseStudy({ onBack }: Props) {
                 · {m}
               </span>
             ))}
+          </div>
+
+          {/* Roadmap validation — these metrics are now official Q1 2026 product KPIs */}
+          <div className="border border-white/10 p-8 md:p-10">
+            <p className={`${sectionLabel} text-white/30 mb-6`} style={{ fontSize: "10px" }}>
+              Validated by programme roadmap · Q1 2026 product KPIs
+            </p>
+            <p className="text-white/55 leading-relaxed mb-8 max-w-[56ch]" style={{ fontSize: "0.9375rem" }}>
+              The metrics I defined before launch became official programme KPIs in the Q1 2026 roadmap — tracked at the executive level.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              {[
+                "Time to yield",
+                "Error & crash rates",
+                "Self-solve rate",
+                "B2B App reviews",
+                "% HHs w/ 1+ API call daily",
+                "L2R / NPS / CSAT",
+              ].map((k) => (
+                <span key={k} className="px-4 py-2 bg-white/5 border border-white/10 text-white/50" style={{ fontSize: "12px", letterSpacing: "0.02em" }}>
+                  {k}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -1392,10 +1522,10 @@ export function CaseStudy({ onBack }: Props) {
       <section className="bg-[#111111] text-white px-6 md:px-12 py-32 md:py-48">
         <ScaleIn duration={0.8}>
           <p
-            className="max-w-[24ch] mx-auto text-center tracking-[-0.025em] leading-[1.05]"
+            className="max-w-[28ch] mx-auto text-center tracking-[-0.025em] leading-[1.05]"
             style={{ fontSize: "clamp(2rem, 6vw, 4.5rem)", fontWeight: 700 }}
           >
-            This work was never about designing screens.
+            This work was about changing what design is allowed to decide.
           </p>
         </ScaleIn>
       </section>

@@ -87,14 +87,15 @@ export function Resume() {
           <span className={`${sectionLabel} text-[#111111]/50`} style={{ fontSize: "11px" }}>
             Resume · 2026
           </span>
-          <button
-            onClick={() => window.print()}
+          <a
+            href="/portfolio/Resume_Jose_Ricardo_Dourado.pdf"
+            download="Resume_Jose_Ricardo_Dourado.pdf"
             className="group inline-flex items-center gap-2 px-4 py-2 bg-[#111111] text-white hover:bg-[#111111]/90 transition-colors"
             style={{ fontSize: "13px" }}
           >
             <Download className="w-3.5 h-3.5" />
             <span className="tracking-tight">Download PDF Resume</span>
-          </button>
+          </a>
         </div>
       </div>
 
@@ -224,13 +225,14 @@ export function Resume() {
         <section className="py-12 md:py-16">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <div>
-              <button
-                onClick={() => window.print()}
+              <a
+                href="/portfolio/Resume_Jose_Ricardo_Dourado.pdf"
+                download="Resume_Jose_Ricardo_Dourado.pdf"
                 className="group inline-flex items-center gap-3 px-7 py-4 bg-[#111111] text-white hover:bg-[#111111]/90 transition-colors"
               >
                 <Download className="w-4 h-4" />
                 <span className="tracking-tight">Download PDF Resume</span>
-              </button>
+              </a>
               <p
                 className={`${sectionLabel} text-[#111111]/40 mt-4`}
                 style={{ fontSize: "11px" }}
