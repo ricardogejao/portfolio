@@ -1,0 +1,254 @@
+/* ====================================================================
+   brand-telus.css — Tier 1–2: Brand Primitives + Theme Aliases (TELUS)
+   ==================================================================== */
+
+/* ---- Brand font: HN for TELUS (licensed OTF bundled in /fonts/brand/telus) ---- */
+@font-face {
+  font-family: "HN for TELUS";
+  src: url("../../fonts/brand/telus/HNforTELUS.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "HN for TELUS";
+  src: url("../../fonts/brand/telus/HNforTELUS-Md.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "HN for TELUS";
+  src: url("../../fonts/brand/telus/HNforTELUS-Bd.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ====================================================================
+   Tier 1–2: Brand Primitives + Theme Aliases (TELUS)
+   ====================================================================
+   Defines everything that is unique to the TELUS brand.
+   Swap this file (via loader.js) to switch to a different brand.
+
+   Contains:
+     - Brand font refs      HN for TELUS
+                            (--brand-font-primary, --brand-font-primary-label)
+     - Brand color palette  purple, green, grey ramps
+                            (--color-brand-purple-*, --color-brand-green-*, --color-brand-grey-*)
+     - Theme aliases        maps role + stop to a brand primitive
+                            (--color-primary-*, --color-secondary-*, --color-tertiary-*,
+                             --color-neutral-*, --color-info/success/alert/error-*)
+     - Brand-font typography display and heading xxlarge/xlarge only —
+                            the styles that use the brand font rather than the platform font.
+                            Sizes and spacing reference global.css primitives.
+                            (--typo-display-*, --typo-heading-xxlarge-*, --typo-heading-xlarge-*)
+
+   Depends on:  global.css (for --text-size-*, --line-height-*, --letter-space-*,
+                          --color-global-*)
+   Selector:    :root[data-brand="telus"] — activated by loader.js
+   ==================================================================== */
+
+:root[data-brand="telus"] {
+  /* brand font */
+  --brand-font-primary: "HN for TELUS", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --brand-font-primary-label: "HN for TELUS"; /* Claude Design only — short font name for switcher UI display */
+  --brand-tagline: "Let's make the future friendly"; /* Claude Design only */
+  --brand-label: "TELUS"; /* Claude Design only */
+
+  /* brand-font weight aliases
+     Map semantic weight roles to the actual cuts available in this font.
+     Not every brand font has all weights — gaps are covered by mapping to the
+     nearest available weight. This ensures correct rendering without relying
+     on browser synthesis (faux bold/italic).
+     HN for TELUS: Light=none→Regular, Medium="Md" (500), Bold=700 */
+  --alias-font-weight-light:    400; /* no Light weight — maps to Regular */
+  --alias-font-weight-regular:  400;
+  --alias-font-weight-medium:   500; /* "Md" in HN for TELUS */
+  --alias-font-weight-semibold: 500; /* no Semibold weight — maps to Md */
+  --alias-font-weight-bold:     700;
+
+  /* brand color primitives */
+  --color-brand-purple-50: #f8f0ff;
+  --color-brand-purple-100: #dfc9f3;
+  --color-brand-purple-200: #c9a4ea;
+  --color-brand-purple-300: #b287d8;
+  --color-brand-purple-400: #a069d2;
+  --color-brand-purple-500: #7c53a5;
+  --color-brand-purple-600: #613889;
+  --color-brand-purple-700: #4b286d;
+  --color-brand-purple-800: #361a4f;
+  --color-brand-purple-900: #0e001e;
+  --color-brand-green-50: #f4f9f2;
+  --color-brand-green-100: #e3f6d1;
+  --color-brand-green-200: #bfe797;
+  --color-brand-green-300: #66cc00;
+  --color-brand-green-400: #39940b;
+  --color-brand-green-500: #2a7c00;
+  --color-brand-green-600: #2b5e00;
+  --color-brand-green-700: #163e06;
+  --color-brand-green-800: #0f2d00;
+  --color-brand-green-900: #061300;
+  --color-brand-grey-50: #fafafa;
+  --color-brand-grey-100: #f4f4f7;
+  --color-brand-grey-200: #d0d0d2;
+  --color-brand-grey-300: #b4b4b7;
+  --color-brand-grey-400: #9a9a9d;
+  --color-brand-grey-500: #818186;
+  --color-brand-grey-600: #6e6e73;
+  --color-brand-grey-700: #54595f;
+  --color-brand-grey-800: #414547;
+  --color-brand-grey-900: #2c2e30;
+
+  /* theme aliases (role + stop → primitive) */
+  --color-primary-lighter: var(--color-brand-purple-50);
+  --color-primary-light: var(--color-brand-purple-300);
+  --color-primary-pure: var(--color-brand-purple-700);
+  --color-primary-dark: var(--color-brand-purple-800);
+  --color-primary-darker: var(--color-brand-purple-900);
+  --color-secondary-lighter: var(--color-brand-green-100);
+  --color-secondary-light: var(--color-brand-green-200);
+  --color-secondary-pure: var(--color-brand-green-600);
+  --color-secondary-dark: var(--color-brand-green-800);
+  --color-secondary-darker: var(--color-brand-green-900);
+  --color-tertiary-lighter: var(--color-brand-green-100);
+  --color-tertiary-light: var(--color-brand-green-200);
+  --color-tertiary-pure: var(--color-brand-green-300);
+  --color-tertiary-dark: var(--color-brand-green-600);
+  --color-tertiary-darker: var(--color-brand-green-800);
+  --color-neutral-lightest: var(--color-brand-grey-50);
+  --color-neutral-lighter: var(--color-brand-grey-100);
+  --color-neutral-light: var(--color-brand-grey-200);
+  --color-neutral-pure: var(--color-brand-grey-500);
+  --color-neutral-dark: var(--color-brand-grey-700);
+  --color-neutral-darker: var(--color-brand-grey-800);
+  --color-neutral-darkest: var(--color-brand-grey-900);
+  --color-info-lighter: var(--color-global-blue-50);
+  --color-info-light: var(--color-global-blue-200);
+  --color-info-pure: var(--color-global-blue-500);
+  --color-info-dark: var(--color-global-blue-700);
+  --color-info-darker: var(--color-global-blue-800);
+  --color-success-lighter: var(--color-global-green-50);
+  --color-success-light: var(--color-global-green-200);
+  --color-success-pure: var(--color-global-green-500);
+  --color-success-dark: var(--color-global-green-700);
+  --color-success-darker: var(--color-global-green-800);
+  --color-alert-lighter: var(--color-global-amber-50);
+  --color-alert-light: var(--color-global-amber-200);
+  --color-alert-pure: var(--color-global-amber-500);
+  --color-alert-dark: var(--color-global-amber-700);
+  --color-alert-darker: var(--color-global-amber-800);
+  --color-error-lighter: var(--color-global-red-50);
+  --color-error-light: var(--color-global-red-200);
+  --color-error-pure: var(--color-global-red-500);
+  --color-error-dark: var(--color-global-red-700);
+  --color-error-darker: var(--color-global-red-800);
+
+  /* brand-font typography — display and heading xxlarge/xlarge
+     HN for TELUS has no Light cut; light tokens use weight 400 (Regular).
+     Platform-invariant — the brand font is the same on all platforms. */
+
+  /* display xlarge */
+  --typo-display-xlarge-family: var(--brand-font-primary);
+  --typo-display-xlarge-size: var(--text-size-13);
+  --typo-display-xlarge-line-height: var(--line-height-13);
+  --typo-display-xlarge-letter-spacing: var(--letter-space-dense);
+  --typo-display-xlarge-weight: var(--alias-font-weight-regular);
+  --typo-display-xlarge: var(--typo-display-xlarge-weight) var(--typo-display-xlarge-size)/var(--typo-display-xlarge-line-height) var(--typo-display-xlarge-family);
+
+  /* display large */
+  --typo-display-large-family: var(--brand-font-primary);
+  --typo-display-large-size: var(--text-size-12);
+  --typo-display-large-line-height: var(--line-height-12);
+  --typo-display-large-letter-spacing: var(--letter-space-tight);
+  --typo-display-large-weight: var(--alias-font-weight-regular);
+  --typo-display-large: var(--typo-display-large-weight) var(--typo-display-large-size)/var(--typo-display-large-line-height) var(--typo-display-large-family);
+
+  /* display medium */
+  --typo-display-medium-family: var(--brand-font-primary);
+  --typo-display-medium-size: var(--text-size-11);
+  --typo-display-medium-line-height: var(--line-height-11);
+  --typo-display-medium-letter-spacing: var(--letter-space-tight);
+  --typo-display-medium-weight: var(--alias-font-weight-regular);
+  --typo-display-medium: var(--typo-display-medium-weight) var(--typo-display-medium-size)/var(--typo-display-medium-line-height) var(--typo-display-medium-family);
+
+  /* display small */
+  --typo-display-small-family: var(--brand-font-primary);
+  --typo-display-small-size: var(--text-size-9);
+  --typo-display-small-line-height: var(--line-height-9);
+  --typo-display-small-letter-spacing: var(--letter-space-tight);
+  --typo-display-small-weight: var(--alias-font-weight-regular);
+  --typo-display-small: var(--typo-display-small-weight) var(--typo-display-small-size)/var(--typo-display-small-line-height) var(--typo-display-small-family);
+
+  /* heading xxlarge */
+  --typo-heading-xxlarge-bold-family: var(--brand-font-primary);
+  --typo-heading-xxlarge-bold-size: var(--text-size-10);
+  --typo-heading-xxlarge-bold-line-height: var(--line-height-10);
+  --typo-heading-xxlarge-bold-letter-spacing: var(--letter-space-tight);
+  --typo-heading-xxlarge-bold-weight: var(--alias-font-weight-bold);
+  --typo-heading-xxlarge-bold: var(--typo-heading-xxlarge-bold-weight) var(--typo-heading-xxlarge-bold-size)/var(--typo-heading-xxlarge-bold-line-height) var(--typo-heading-xxlarge-bold-family);
+
+  --typo-heading-xxlarge-regular-family: var(--brand-font-primary);
+  --typo-heading-xxlarge-regular-size: var(--text-size-10);
+  --typo-heading-xxlarge-regular-line-height: var(--line-height-10);
+  --typo-heading-xxlarge-regular-letter-spacing: var(--letter-space-tight);
+  --typo-heading-xxlarge-regular-weight: var(--alias-font-weight-medium);
+  --typo-heading-xxlarge-regular: var(--typo-heading-xxlarge-regular-weight) var(--typo-heading-xxlarge-regular-size)/var(--typo-heading-xxlarge-regular-line-height) var(--typo-heading-xxlarge-regular-family);
+
+  --typo-heading-xxlarge-light-family: var(--brand-font-primary);
+  --typo-heading-xxlarge-light-size: var(--text-size-10);
+  --typo-heading-xxlarge-light-line-height: var(--line-height-10);
+  --typo-heading-xxlarge-light-letter-spacing: var(--letter-space-tight);
+  --typo-heading-xxlarge-light-weight: var(--alias-font-weight-light);
+  --typo-heading-xxlarge-light: var(--typo-heading-xxlarge-light-weight) var(--typo-heading-xxlarge-light-size)/var(--typo-heading-xxlarge-light-line-height) var(--typo-heading-xxlarge-light-family);
+
+  /* heading xlarge */
+  --typo-heading-xlarge-bold-family: var(--brand-font-primary);
+  --typo-heading-xlarge-bold-size: var(--text-size-9);
+  --typo-heading-xlarge-bold-line-height: var(--line-height-9);
+  --typo-heading-xlarge-bold-letter-spacing: var(--letter-space-tight);
+  --typo-heading-xlarge-bold-weight: var(--alias-font-weight-bold);
+  --typo-heading-xlarge-bold: var(--typo-heading-xlarge-bold-weight) var(--typo-heading-xlarge-bold-size)/var(--typo-heading-xlarge-bold-line-height) var(--typo-heading-xlarge-bold-family);
+
+  --typo-heading-xlarge-regular-family: var(--brand-font-primary);
+  --typo-heading-xlarge-regular-size: var(--text-size-9);
+  --typo-heading-xlarge-regular-line-height: var(--line-height-9);
+  --typo-heading-xlarge-regular-letter-spacing: var(--letter-space-tight);
+  --typo-heading-xlarge-regular-weight: var(--alias-font-weight-medium);
+  --typo-heading-xlarge-regular: var(--typo-heading-xlarge-regular-weight) var(--typo-heading-xlarge-regular-size)/var(--typo-heading-xlarge-regular-line-height) var(--typo-heading-xlarge-regular-family);
+
+  --typo-heading-xlarge-light-family: var(--brand-font-primary);
+  --typo-heading-xlarge-light-size: var(--text-size-9);
+  --typo-heading-xlarge-light-line-height: var(--line-height-9);
+  --typo-heading-xlarge-light-letter-spacing: var(--letter-space-tight);
+  --typo-heading-xlarge-light-weight: var(--alias-font-weight-light);
+  --typo-heading-xlarge-light: var(--typo-heading-xlarge-light-weight) var(--typo-heading-xlarge-light-size)/var(--typo-heading-xlarge-light-line-height) var(--typo-heading-xlarge-light-family);
+
+  /* ==================================================================
+     Gradients (TELUS-only)
+     ------------------------------------------------------------------
+     Brand gradients are reserved for intentional brand moments. Each
+     gradient has a solid colour fallback for non-TELUS brands and for
+     render failures. Never apply gradients to text or borders.
+     ================================================================== */
+
+  /* Linear primary - signature TELUS gradient (purple → pink, 135°) */
+  --gradient-linear-primary:
+    linear-gradient(135deg, #4B286D 0%, #E53293 100%);
+
+  /* Linear primary subtle - low-contrast linear gradient (light purple → light pink, 135°)
+     Reserved for future use - do not apply yet. */
+  --gradient-linear-primary-subtle:
+    linear-gradient(135deg, #B287D8 0%, #DB8FCF 100%);
+
+  /* Linear primary bold - radial variant (pink bottom-right glow → deep purple)
+     Origin sits well beyond the bottom-right corner so only a soft pink halo
+     bleeds into view; the surface reads as deep purple with a brand accent.
+     Use for Primary Navigation header background only. */
+  --gradient-radial-primary-bold:
+    radial-gradient(circle at 140% 140%, #E53293 0%, #4B286D 55%);
+
+  /* Linear secondary - secondary brand gradient (dark green → bright green, 135°) */
+  --gradient-linear-secondary:
+    linear-gradient(135deg, #2A7C00 0%, #66CC00 100%);
+}

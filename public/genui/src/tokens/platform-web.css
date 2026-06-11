@@ -1,0 +1,25 @@
+/* ====================================================================
+   platform-web.css — Tier 1: Platform Primitives (Web)
+   ====================================================================
+   Overrides and extends global.css with Web-specific values.
+   Each platform file is maintained independently.
+
+   Contains:
+     - Platform font stack        Noto Sans / system-ui
+                                  (--platform-font-default, --platform-font-label)
+
+   Note: Platform-specific component tokens (toggle) live in components.css
+         and are activated by the [data-platform="web"] selector set by loader.js.
+
+   Depends on:  global.css
+   Selector:    :root[data-platform="web"] — activated by loader.js
+   ==================================================================== */
+
+/* Platform font stack */
+:root[data-platform="web"] {
+  --platform-font-default: "Noto Sans", system-ui, sans-serif;
+  --platform-font-label:   "Noto Sans";
+
+  /* Platform overrides — add tokens here if Web requires
+     platform-specific values (e.g. letter spacing, font weights) */
+}

@@ -1,0 +1,175 @@
+/* ====================================================================
+   semantic.css — Tier 3: Semantic Color Tokens
+   ====================================================================
+   Maps semantic roles (background, text, border, icon) to the active
+   brand's theme aliases. Because these use var() references, they
+   resolve to the correct brand color at computed time — no duplication
+   across brand files.
+
+   Contains:
+     - Background tokens    (--background-primary/secondary/tertiary/neutral/
+                             app/modal/disabled/video/overlay/tabbar/
+                             success/alert/error/info and variants)
+     - Text tokens          (--text-primary/secondary/tertiary/neutral/
+                             disabled/success/alert/error/info and variants)
+     - Border tokens        (--border-primary/secondary/neutral/
+                             disabled/success/alert/error/info and variants)
+     - Icon tokens          (--icon-primary/neutral/success/alert/error/info
+                             and variants)
+
+   Depends on:  global.css (for --color-base-*),
+                brand-*.css (for --color-primary/secondary/tertiary/neutral/
+                             info/success/alert/error-*)
+   Selector:    :root — always active once loaded
+   ==================================================================== */
+
+:root {
+  /* background */
+  --background-primary: var(--color-primary-pure);
+  --background-primary-subtle: var(--color-primary-lighter);
+  --background-primary-bold: var(--color-primary-dark);
+  --background-primary-inverse: var(--color-base-white);
+  --background-secondary: var(--color-secondary-pure);
+  --background-secondary-subtle: var(--color-secondary-lighter);
+  --background-secondary-bold: var(--color-secondary-dark);
+  --background-secondary-inverse: var(--color-base-white);
+  --background-tertiary: var(--color-tertiary-pure);
+  --background-tertiary-subtle: var(--color-tertiary-light);
+  --background-tertiary-bold: var(--color-tertiary-dark);
+  --background-tertiary-inverse: var(--color-base-white);
+  --background-neutral: var(--color-neutral-pure);
+  --background-neutral-subtle: var(--color-neutral-lighter);
+  --background-neutral-bold: var(--color-neutral-darker);
+  --background-neutral-inverse: var(--color-base-white);
+  --background-app: var(--color-base-white);
+  --background-app-neutral: var(--color-neutral-lighter);
+  --background-modal: var(--color-neutral-lighter);
+  --background-disabled: var(--color-neutral-lighter);
+  --background-disabled-bold: var(--color-neutral-light);
+  --background-disabled-subtle: var(--color-neutral-lightest);
+  --background-video: var(--color-base-black);
+  --background-overlay: #00000099;
+  --background-tabbar: var(--color-neutral-lighter);
+  --background-success: var(--color-success-pure);
+  --background-success-subtle: var(--color-success-lighter);
+  --background-success-bold: var(--color-success-dark);
+  --background-success-inverse: var(--color-base-white);
+  --background-alert: var(--color-alert-light);
+  --background-alert-subtle: var(--color-alert-lighter);
+  --background-alert-bold: var(--color-alert-pure);
+  --background-alert-inverse: var(--color-base-white);
+  --background-error: var(--color-error-pure);
+  --background-error-subtle: var(--color-error-lighter);
+  --background-error-bold: var(--color-error-dark);
+  --background-error-inverse: var(--color-base-white);
+  --background-info: var(--color-info-pure);
+  --background-info-subtle: var(--color-info-lighter);
+  --background-info-bold: var(--color-info-dark);
+  --background-info-inverse: var(--color-base-white);
+
+  /* text */
+  --text-primary: var(--color-primary-pure);
+  --text-primary-inverse: var(--color-base-white);
+  --text-primary-subtle: var(--color-primary-light);
+  --text-primary-bold: var(--color-primary-dark);
+  --text-secondary: var(--color-secondary-pure);
+  --text-secondary-inverse: var(--color-base-white);
+  --text-secondary-subtle: var(--color-secondary-light);
+  --text-secondary-bold: var(--color-secondary-dark);
+  --text-tertiary: var(--color-tertiary-pure);
+  --text-tertiary-inverse: var(--color-base-white);
+  --text-tertiary-subtle: var(--color-tertiary-light);
+  --text-tertiary-bold: var(--color-tertiary-dark);
+  --text-neutral: var(--color-neutral-dark);
+  --text-neutral-inverse: var(--color-base-white);
+  --text-neutral-subtle: var(--color-neutral-pure);
+  --text-neutral-bold: var(--color-neutral-darker);
+  --text-neutral-bolder: var(--color-base-black);
+  --text-disabled: var(--color-neutral-pure);
+  --text-success: var(--color-success-pure);
+  --text-success-subtle: var(--color-success-light);
+  --text-success-bold: var(--color-success-dark);
+  --text-success-inverse: var(--color-base-white);
+  --text-alert: var(--color-alert-pure);
+  --text-alert-subtle: var(--color-alert-light);
+  --text-alert-bold: var(--color-alert-dark);
+  --text-alert-inverse: var(--color-base-white);
+  --text-error: var(--color-error-pure);
+  --text-error-subtle: var(--color-error-light);
+  --text-error-bold: var(--color-error-dark);
+  --text-error-inverse: var(--color-base-white);
+  --text-info: var(--color-info-pure);
+  --text-info-subtle: var(--color-info-light);
+  --text-info-bold: var(--color-info-dark);
+  --text-info-inverse: var(--color-base-white);
+
+  /* border */
+  --border-primary: var(--color-primary-light);
+  --border-primary-subtle: var(--color-primary-lighter);
+  --border-primary-bold: var(--color-primary-dark);
+  --border-primary-inverse: var(--color-base-white);
+  --border-secondary: var(--color-secondary-pure);
+  --border-secondary-subtle: var(--color-secondary-lighter);
+  --border-secondary-bold: var(--color-secondary-dark);
+  --border-secondary-inverse: var(--color-base-white);
+  --border-tertiary: var(--color-tertiary-pure);
+  --border-tertiary-subtle: var(--color-tertiary-light);
+  --border-tertiary-bold: var(--color-tertiary-dark);
+  --border-tertiary-inverse: var(--color-base-white);
+  --border-neutral: var(--color-neutral-light);
+  --border-neutral-subtle: var(--color-neutral-lighter);
+  --border-neutral-bold: var(--color-neutral-dark);
+  --border-neutral-inverse: var(--color-base-white);
+  --border-disabled: var(--color-neutral-lighter);
+  --border-disabled-bold: var(--color-neutral-light);
+  --border-success: var(--color-success-pure);
+  --border-success-subtle: var(--color-success-lighter);
+  --border-success-bold: var(--color-success-dark);
+  --border-success-inverse: var(--color-base-white);
+  --border-alert: var(--color-alert-light);
+  --border-alert-subtle: var(--color-alert-lighter);
+  --border-alert-bold: var(--color-alert-pure);
+  --border-alert-inverse: var(--color-base-white);
+  --border-error: var(--color-error-pure);
+  --border-error-subtle: var(--color-error-lighter);
+  --border-error-bold: var(--color-error-dark);
+  --border-error-inverse: var(--color-base-white);
+  --border-info: var(--color-info-pure);
+  --border-info-subtle: var(--color-info-lighter);
+  --border-info-bold: var(--color-info-dark);
+  --border-info-inverse: var(--color-base-white);
+
+  /* icon */
+  --icon-primary: var(--color-primary-pure);
+  --icon-primary-subtle: var(--color-primary-light);
+  --icon-primary-bold: var(--color-primary-dark);
+  --icon-primary-inverse: var(--color-base-white);
+  --icon-secondary: var(--color-secondary-pure);
+  --icon-secondary-subtle: var(--color-secondary-light);
+  --icon-secondary-bold: var(--color-secondary-dark);
+  --icon-secondary-inverse: var(--color-base-white);
+  --icon-tertiary: var(--color-tertiary-pure);
+  --icon-tertiary-subtle: var(--color-tertiary-light);
+  --icon-tertiary-bold: var(--color-tertiary-dark);
+  --icon-tertiary-inverse: var(--color-base-white);
+  --icon-neutral: var(--color-neutral-dark);
+  --icon-neutral-subtle: var(--color-neutral-pure);
+  --icon-neutral-bold: var(--color-neutral-darker);
+  --icon-neutral-inverse: var(--color-base-white);
+  --icon-success: var(--color-success-pure);
+  --icon-success-subtle: var(--color-success-light);
+  --icon-success-bold: var(--color-success-dark);
+  --icon-success-inverse: var(--color-base-white);
+  --icon-alert: var(--color-alert-pure);
+  --icon-alert-subtle: var(--color-alert-light);
+  --icon-alert-bold: var(--color-alert-dark);
+  --icon-alert-inverse: var(--color-base-white);
+  --icon-error: var(--color-error-pure);
+  --icon-error-subtle: var(--color-error-light);
+  --icon-error-bold: var(--color-error-dark);
+  --icon-error-inverse: var(--color-base-white);
+  --icon-info: var(--color-info-pure);
+  --icon-info-subtle: var(--color-info-light);
+  --icon-info-bold: var(--color-info-dark);
+  --icon-info-inverse: var(--color-base-white);
+}

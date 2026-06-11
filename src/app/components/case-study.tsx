@@ -1,7 +1,322 @@
 import { ArrowLeft, ArrowRight, Check } from "lucide-react";
+import { GenUIEmbed } from "./genui-embed";
+import { useRef, useState, useCallback, useEffect, type ReactNode } from "react";
+import { motion, AnimatePresence, useInView, useScroll, useTransform } from "motion/react";
 import { Footer } from "./footer";
 import { ScrollProgress } from "./scroll-progress";
 import { Reveal, SlideIn, ScaleIn } from "./motion-primitives";
+import caseHeroVideo from "../../imports/case-study-hero.mp4";
+import logoGejao from "../../imports/image-2.png";
+import productMockup from "../../imports/product-mockup.mov";
+import teamPhoto from "../../imports/team-photo.jpg";
+import screenHome from "../../imports/device_home.png";
+import screenList from "../../imports/device_list.png";
+import screenControl from "../../imports/device_control.png";
+import screenColor from "../../imports/device_color_picker.png";
+import sduiBeforeLight from "../../imports/sdui_before_light.png";
+import sduiBeforeThermostat from "../../imports/sdui_before_thermostat.png";
+import sduiAfterLight from "../../imports/sdui_after_light.png";
+import sduiAfterThermostat from "../../imports/sdui_after_thermostat.png";
+import sduiBeforeScreens from "../../imports/sdui_before_screens.png";
+import sduiAfterScreens from "../../imports/sdui_after_screens.png";
+import homeAway01 from "../../imports/home_away_01.png";
+import homeAway02 from "../../imports/home_away_02.png";
+import homeAway03 from "../../imports/home_away_03.png";
+import homeAway04 from "../../imports/home_away_04.png";
+import notifCritSmoke from "../../imports/notif_crit_smoke.png";
+import notifCritCo from "../../imports/notif_crit_co.png";
+import notifInfoMotion from "../../imports/notif_info_motion.png";
+import notifInfoWindow from "../../imports/notif_info_window.png";
+import notifInfoLeak from "../../imports/notif_info_leak.png";
+import notifScreenCritical from "../../imports/notif_screen_critical.png";
+import notifCoScreen from "../../imports/notif_critical_02.png";
+import jarvis01 from "../../imports/jarvis_01.png";
+import jarvis02 from "../../imports/jarvis_02.png";
+import jarvis03 from "../../imports/jarvis_03.png";
+import jarvis04 from "../../imports/jarvis_04.png";
+import jarvis05 from "../../imports/jarvis_05.png";
+import jarvis06 from "../../imports/jarvis_06.png";
+
+function ComparisonSlider({
+  before, after, beforeLabel = "Before", afterLabel = "After",
+}: {
+  before: string; after: string; beforeLabel?: string; afterLabel?: string;
+}) {
+  const [pos, setPos] = useState(50);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const dragging = useRef(false);
+  const animated = useRef(false);
+  const inView = useInView(containerRef, { once: true, amount: 0.5 });
+
+  // Intro animation: fires once when slider scrolls into view
+  useEffect(() => {
+    if (!inView || animated.current) return;
+    animated.current = true;
+
+    const keyframes = [50, 82, 18, 50];
+    const durations = [700, 900, 600];
+
+    let rafId: number;
+    let phase = 0;
+    let phaseStart: number | null = null;
+
+    const ease = (t: number) => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+
+    const tick = (now: number) => {
+      if (phaseStart === null) phaseStart = now;
+      const t = Math.min((now - phaseStart) / durations[phase], 1);
+      setPos(keyframes[phase] + (keyframes[phase + 1] - keyframes[phase]) * ease(t));
+      if (t < 1) {
+        rafId = requestAnimationFrame(tick);
+      } else if (phase < durations.length - 1) {
+        phase++;
+        phaseStart = null;
+        rafId = requestAnimationFrame(tick);
+      }
+    };
+
+    const timeout = setTimeout(() => { rafId = requestAnimationFrame(tick); }, 300);
+    return () => { clearTimeout(timeout); cancelAnimationFrame(rafId); };
+  }, [inView]);
+
+  const move = useCallback((clientX: number) => {
+    if (!containerRef.current) return;
+    const { left, width } = containerRef.current.getBoundingClientRect();
+    setPos(Math.min(100, Math.max(0, ((clientX - left) / width) * 100)));
+  }, []);
+
+  return (
+    <div
+      ref={containerRef}
+      className="relative select-none overflow-hidden cursor-ew-resize"
+      onMouseDown={(e) => { dragging.current = true; move(e.clientX); }}
+      onMouseMove={(e) => dragging.current && move(e.clientX)}
+      onMouseUp={() => { dragging.current = false; }}
+      onMouseLeave={() => { dragging.current = false; }}
+      onTouchStart={(e) => move(e.touches[0].clientX)}
+      onTouchMove={(e) => move(e.touches[0].clientX)}
+    >
+      {/* Before */}
+      <img src={before} alt={beforeLabel} className="w-full block" draggable={false} />
+
+      {/* After (revealed left-to-right) */}
+      <div className="absolute inset-0" style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }}>
+        <img src={after} alt={afterLabel} className="w-full block" draggable={false} />
+      </div>
+
+      {/* Divider line */}
+      <div className="absolute top-0 bottom-0 w-[2px] bg-white shadow-[0_0_8px_rgba(0,0,0,0.3)] pointer-events-none" style={{ left: `${pos}%` }} />
+
+      {/* Handle */}
+      <div
+        className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-white shadow-[0_2px_16px_rgba(0,0,0,0.25)] flex items-center justify-center pointer-events-none"
+        style={{ left: `${pos}%` }}
+      >
+        <svg width="18" height="10" viewBox="0 0 18 10" fill="none">
+          <path d="M5 5H1M1 5L4 2M1 5L4 8" stroke="#333" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M13 5H17M17 5L14 2M17 5L14 8" stroke="#333" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      </div>
+
+      {/* Labels */}
+      <div className="absolute top-4 left-4 pointer-events-none">
+        <span className="px-2.5 py-1 bg-[#E5484D] text-white rounded-full tracking-wide" style={{ fontSize: "10px", fontWeight: 600 }}>
+          {beforeLabel}
+        </span>
+      </div>
+      <div className="absolute top-4 right-4 pointer-events-none" style={{ opacity: pos > 15 ? 1 : 0, transition: "opacity 0.2s" }}>
+        <span className="px-2.5 py-1 bg-[#30A46C] text-white rounded-full tracking-wide" style={{ fontSize: "10px", fontWeight: 600 }}>
+          {afterLabel}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+const EASE = [0.2, 0, 0, 1] as const;
+
+function PhoneFrame({ children, glow = false }: { children: ReactNode; glow?: boolean }) {
+  return (
+    <div className="relative w-full max-w-[210px] aspect-[9/19] mx-auto">
+      <div className={`absolute inset-0 rounded-[2.5rem] bg-[#1c1c1e] border-2 ${glow ? "border-[#E5484D]/50 shadow-[0_0_40px_rgba(229,72,77,0.25),0_20px_60px_rgba(0,0,0,0.7)]" : "border-white/20 shadow-[0_20px_60px_rgba(0,0,0,0.6)]"}`} />
+      <div className="absolute -left-[3px] top-[20%] w-[3px] h-5 bg-white/20 rounded-l-sm" />
+      <div className="absolute -left-[3px] top-[28%] w-[3px] h-8 bg-white/20 rounded-l-sm" />
+      <div className="absolute -right-[3px] top-[24%] w-[3px] h-7 bg-white/20 rounded-r-sm" />
+      <div className="absolute inset-[4px] rounded-[2.1rem] overflow-hidden">{children}</div>
+      <div className="absolute top-[4px] left-1/2 -translate-x-1/2 w-[28%] h-[3.2%] bg-[#1c1c1e] rounded-b-2xl z-10" />
+    </div>
+  );
+}
+
+function NotificationTiers() {
+  const sequence = [
+    { src: notifInfoMotion, alt: "Hallway sensor detected motion", critical: false },
+    { src: notifInfoWindow, alt: "Bedroom window closed",          critical: false },
+    { src: notifCritSmoke,  alt: "Smoke Detected",                 critical: true  },
+    { src: notifInfoLeak,   alt: "Bathroom sensor detected leak",  critical: false },
+    { src: notifInfoMotion, alt: "Hallway sensor detected motion", critical: false },
+    { src: notifCritCo,     alt: "Carbon Monoxide Detected!",      critical: true  },
+  ];
+
+  type Item = { id: number; src: string; alt: string; critical: boolean };
+  const [stack, setStack]         = useState<Item[]>([]);
+  const [showPhone, setShowPhone] = useState(false);
+  const idRef       = useRef(0);
+  const seqRef      = useRef(0);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const timeoutRef  = useRef<ReturnType<typeof setTimeout>  | null>(null);
+  const started     = useRef(false);
+  const wrapperRef  = useRef<HTMLDivElement>(null);
+  const inView      = useInView(wrapperRef, { once: true, amount: 0.4 });
+
+  const { scrollYProgress } = useScroll({ target: wrapperRef, offset: ["start end", "end start"] });
+  const notifY = useTransform(scrollYProgress, [0, 1], [0, -65]);
+  const phoneY = useTransform(scrollYProgress, [0, 1], [0, -30]);
+
+  useEffect(() => {
+    if (!inView || started.current) return;
+    started.current = true;
+
+    const add = () => {
+      if (seqRef.current >= sequence.length) return;
+      const notif = sequence[seqRef.current];
+      seqRef.current++;
+      const isFinal = seqRef.current >= sequence.length;
+      setStack(prev => [{ ...notif, id: idRef.current++ }, ...prev].slice(0, 4));
+      if (isFinal) {
+        if (intervalRef.current) clearInterval(intervalRef.current);
+        if (timeoutRef.current)  clearTimeout(timeoutRef.current);
+        // Mockup starts appearing first, then others fade out as it reveals
+        setTimeout(() => setShowPhone(true), 600);
+        setTimeout(() => setStack(prev => prev.slice(0, 1)), 1800);
+      }
+    };
+
+    timeoutRef.current  = setTimeout(add, 400);
+    intervalRef.current = setInterval(add, 2400);
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      if (timeoutRef.current)  clearTimeout(timeoutRef.current);
+    };
+  }, [inView]);
+
+  return (
+    <div ref={wrapperRef}>
+      {/* Stack + phone */}
+      <div className="relative flex justify-center overflow-visible" style={{ height: "170px" }}>
+
+        {/* Phone mockup */}
+        <AnimatePresence>
+          {showPhone && (
+            <motion.div
+              className="absolute hidden md:block"
+              style={{ left: "calc(50% + 190px)", top: "-60px", zIndex: 0, y: phoneY }}
+              initial={{ x: 56, opacity: 0, scale: 0.9, filter: "blur(12px)" }}
+              animate={{ x: 0, opacity: 1, scale: 1, filter: "blur(0px)" }}
+              transition={{ duration: 1.4, ease: EASE }}
+            >
+              <div className="relative w-[240px] aspect-[9/19]">
+                {/* Pulsing red radial gradient background */}
+                <motion.div
+                  className="absolute pointer-events-none"
+                  style={{
+                    inset: "-100px",
+                    background: "radial-gradient(ellipse at center, rgba(229,72,77,0.55) 0%, rgba(229,72,77,0.15) 50%, transparent 72%)",
+                    zIndex: -1,
+                  }}
+                  animate={{ opacity: [0.25, 1, 0.25] }}
+                  transition={{ duration: 3.5, ease: "easeInOut", repeat: Infinity }}
+                />
+                <div className="absolute inset-0 rounded-[2.8rem] bg-[#1c1c1e] border-2 border-[#E5484D]/45 shadow-[0_0_48px_rgba(229,72,77,0.22),0_24px_64px_rgba(0,0,0,0.75)]" />
+                <div className="absolute -left-[3px] top-[20%] w-[3px] h-6 bg-white/20 rounded-l-sm" />
+                <div className="absolute -left-[3px] top-[28%] w-[3px] h-10 bg-white/20 rounded-l-sm" />
+                <div className="absolute -right-[3px] top-[24%] w-[3px] h-8 bg-white/20 rounded-r-sm" />
+                <div className="absolute inset-[4px] rounded-[2.5rem] overflow-hidden">
+                  <img src={notifCoScreen} alt="Carbon monoxide detected screen" className="w-full h-full object-cover object-top" />
+                </div>
+                <div className="absolute top-[4px] left-1/2 -translate-x-1/2 w-[28%] h-[3%] bg-[#1c1c1e] rounded-b-2xl z-10" />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Notifications — outer wrapper carries parallax, inner handles stacking */}
+        <motion.div
+          className="absolute inset-0 flex justify-center"
+          style={{ y: notifY }}
+        >
+          <AnimatePresence>
+          {stack.map((item, i) => (
+            <motion.div
+              key={item.id}
+              className="absolute w-full max-w-[480px] px-6 md:px-0"
+              style={{ zIndex: 10 - i }}
+              initial={{ y: -64, opacity: 0, scale: 0.93 }}
+              animate={{
+                y: i * 11,
+                scale: 1 - i * 0.042,
+                opacity: Math.max(0, 1 - i * 0.24),
+              }}
+              exit={{ opacity: 0, scale: 0.97, transition: { duration: 1.6, ease: EASE } }}
+              transition={{ duration: 0.48, ease: EASE }}
+            >
+              <div className="relative" style={{ isolation: "isolate" }}>
+                {item.critical && stack.length === 1 && (
+                  <motion.div
+                    className="absolute pointer-events-none"
+                    style={{
+                      top: "-30px", left: "-30px", right: "-30px", bottom: "-30px",
+                      borderRadius: "28px",
+                      zIndex: 0,
+                      background: "radial-gradient(ellipse at center, rgba(229,72,77,0.6) 0%, transparent 68%)",
+                    }}
+                    animate={{ opacity: [0.2, 0.9, 0.2] }}
+                    transition={{ duration: 3, ease: "easeInOut", repeat: Infinity }}
+                  />
+                )}
+                <img
+                  style={{ position: "relative", zIndex: 1 }}
+                  src={item.src}
+                  alt={item.alt}
+                  draggable={false}
+                  className={`w-full rounded-[18px] ${
+                    item.critical && stack.length === 1
+                      ? "shadow-[0_32px_80px_rgba(0,0,0,0.85),0_6px_32px_rgba(229,72,77,0.55)] ring-1 ring-[#E5484D]/60"
+                      : item.critical
+                      ? "shadow-[0_4px_28px_rgba(229,72,77,0.45)] ring-1 ring-[#E5484D]/50"
+                      : "shadow-[0_4px_16px_rgba(0,0,0,0.35)]"
+                  }`}
+                />
+              </div>
+            </motion.div>
+          ))}
+          </AnimatePresence>
+        </motion.div>
+
+      </div>
+
+      {/* Copy + Legend */}
+      <div className="mt-0 w-full max-w-[480px] mx-auto px-6 md:px-0 flex flex-col gap-20">
+        {/* Copy */}
+        <p className="text-white/60 leading-snug max-w-[320px]" style={{ fontSize: "1.0625rem" }}>
+          Not every alert deserves the same urgency. Informational events are silenced when you're home.{" "}
+          <span className="text-[#E5484D]/80">Critical alerts</span> break through regardless of mode.
+        </p>
+
+        <div className="flex flex-col gap-1.5">
+          <span className="flex items-center gap-2 text-white/35" style={{ fontSize: "0.75rem" }}>
+            <span className="w-1.5 h-1.5 rounded-full bg-[#2A9CB5] flex-shrink-0" />
+            Informational · muted when home
+          </span>
+          <span className="flex items-center gap-2 text-white/35" style={{ fontSize: "0.75rem" }}>
+            <span className="w-1.5 h-1.5 rounded-full bg-[#E5484D] flex-shrink-0" />
+            Critical · always on
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 type Props = {
   onBack: () => void;
@@ -26,9 +341,10 @@ export function CaseStudy({ onBack }: Props) {
           </button>
           <button
             onClick={() => window.__navigate?.("home")}
-            className="justify-self-center tracking-tight"
+            className="justify-self-center"
+            aria-label="Home"
           >
-            gejão
+            <img src={logoGejao} alt="gejão" className="h-8 w-auto object-contain" />
           </button>
           <div
             className="hidden md:flex items-center gap-6 uppercase tracking-[0.18em] text-white/60 justify-self-end"
@@ -44,80 +360,94 @@ export function CaseStudy({ onBack }: Props) {
       </header>
 
       {/* HERO */}
-      <section className="relative bg-[#111111] text-white min-h-[80vh] flex flex-col">
-        <div className="relative px-6 md:px-12 pt-16 md:pt-24 pb-12 md:pb-16 max-w-[1500px]">
-          <p
-            className={`${sectionLabel} text-white/50 mb-10 md:mb-14`}
-            style={{ fontSize: "12px" }}
-          >
-            Design Leadership · Platform · AI · 2024–2026
-          </p>
-
-          <h1
-            className="tracking-[-0.03em] leading-[1.0] max-w-[22ch]"
-            style={{ fontSize: "clamp(2.75rem, 8vw, 7rem)", fontWeight: 700 }}
-          >
-            Leading the Transformation of TELUS SmartHome+
-          </h1>
-
-          {/* Meta row with thin dividers */}
-          <div className="mt-12 md:mt-20 grid grid-cols-2 md:grid-cols-4 border-y border-white/15">
-            {[
-              ["Role", "Design Lead & Manager"],
-              ["Company", "TELUS Digital via Poatek"],
-              ["Duration", "2024–2026"],
-              ["Team", "8 Designers"],
-            ].map(([k, v], i) => (
-              <div
-                key={k}
-                className={`py-6 md:py-7 px-0 md:px-6 ${
-                  i > 0 ? "md:border-l border-white/15" : ""
-                } ${i % 2 === 1 ? "border-l border-white/15 md:border-l pl-6 md:pl-6" : ""}`}
+      <section className="bg-[#111111] text-white">
+        {/* Video with label + heading overlaid */}
+        <div className="relative">
+          <video
+            aria-hidden
+            src={caseHeroVideo}
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="w-full block opacity-80 pointer-events-none"
+          />
+          <div aria-hidden className="absolute inset-0 bg-[#111111]/25 pointer-events-none" />
+          {/* Cover Veo watermarks */}
+          <div aria-hidden className="absolute pointer-events-none" style={{ right: "5%", bottom: "10%", width: "12%", height: "20%", background: "radial-gradient(ellipse at center, #1d1e22 30%, transparent 75%)" }} />
+          <div aria-hidden className="absolute pointer-events-none" style={{ right: "0", bottom: "0", width: "8%", height: "6%", background: "linear-gradient(135deg, transparent 30%, #1d1e22 60%)" }} />
+          <div className="absolute inset-0 z-10 flex flex-col justify-start px-6 md:px-12 pt-20 md:pt-28 pb-8 md:pb-10 max-w-[1500px]">
+            <p
+              className={`${sectionLabel} text-white/50`}
+              style={{ fontSize: "12px" }}
+            >
+              Design Leadership · Platform · AI · 2024–2026
+            </p>
+            <div className="mt-10 md:mt-14">
+              <h1
+                className="tracking-[-0.03em] leading-[1.0] max-w-[22ch] mb-8 md:mb-10"
+                style={{ fontSize: "clamp(2.75rem, 8vw, 7rem)", fontWeight: 700 }}
               >
-                <p
-                  className={`${sectionLabel} text-white/40 mb-2`}
-                  style={{ fontSize: "10px" }}
-                >
-                  {k}
-                </p>
-                <p className="text-white/90 leading-snug tracking-tight">{v}</p>
+                Leading the Transformation of TELUS SmartHome+
+              </h1>
+              <div className="grid grid-cols-2 md:grid-cols-4 border-y border-white/15">
+                {[
+                  ["Role", "Design Lead & Manager"],
+                  ["Company", "TELUS Digital via Poatek"],
+                  ["Duration", "2024–2026"],
+                  ["Team", "8 Designers"],
+                ].map(([k, v], i) => (
+                  <div
+                    key={k}
+                    className={`py-5 md:py-6 ${
+                      i > 0 ? "md:border-l border-white/15 md:pl-6" : ""
+                    } ${i % 2 === 1 ? "border-l border-white/15 pl-6" : ""}`}
+                  >
+                    <p className={`${sectionLabel} text-white/40 mb-2`} style={{ fontSize: "10px" }}>{k}</p>
+                    <p className="text-white/90 leading-snug tracking-tight">{v}</p>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
         </div>
 
-        {/* App screens placeholder — full width */}
-        <div className="relative mt-auto">
-          <div className="relative w-full h-[clamp(320px,52vh,640px)] bg-[#161616] overflow-hidden">
-            <div className="absolute inset-0 flex items-end justify-center gap-4 md:gap-8 px-6 md:px-12 pb-0">
-              {[0, 1, 2, 3].map((i) => (
+        {/* App screens — full width */}
+        <div className="relative">
+          <div className="relative w-full h-[clamp(380px,58vh,700px)] bg-[#1c1c1e] overflow-hidden">
+            {/* Radial purple sunset glow */}
+            <div aria-hidden className="absolute inset-0 pointer-events-none z-0" style={{ background: "radial-gradient(ellipse 90% 70% at 50% 100%, rgba(78,22,128,0.35) 0%, rgba(50,10,90,0.15) 40%, transparent 70%)" }} />
+            {/* subtle gradient fade at bottom */}
+            <div className="absolute bottom-0 inset-x-0 h-10 bg-gradient-to-t from-[#1c1c1e]/60 to-transparent z-10 pointer-events-none" />
+            <div className="absolute inset-0 flex items-end justify-center gap-3 md:gap-6 pb-0" style={{ paddingLeft: "5%", paddingRight: "5%" }}>
+
+              {[
+                { src: screenHome,    alt: "Home screen",    offset: 80 },
+                { src: screenList,    alt: "Device list",    offset: 20 },
+                { src: screenControl, alt: "Device control", offset: 60 },
+                { src: screenColor,   alt: "Colour picker",  offset: 10 },
+              ].map(({ src, alt, offset }) => (
                 <div
-                  key={i}
-                  className="w-[120px] md:w-[200px] aspect-[9/19] bg-[#0A0A0A] border border-white/10 rounded-t-[2rem] p-2.5 shadow-2xl translate-y-6"
-                  style={{
-                    transform: `translateY(${i % 2 === 0 ? "32px" : "8px"})`,
-                  }}
+                  key={alt}
+                  className="flex-1 max-w-[180px] md:max-w-[220px] aspect-[9/19] flex-shrink-0 relative"
+                  style={{ transform: `translateY(${offset}px)` }}
                 >
-                  <div className="w-full h-full rounded-t-[1.6rem] bg-[#141414] p-4 flex flex-col gap-2">
-                    <div className="h-1.5 w-10 bg-white/20 rounded-full" />
-                    <div className="h-3 w-24 bg-white/70 rounded-sm mt-1" />
-                    <div className="grid grid-cols-2 gap-2 mt-3">
-                      {[0, 1, 2, 3].map((j) => (
-                        <div key={j} className="aspect-square bg-white/[0.05] border border-white/10 rounded-lg" />
-                      ))}
-                    </div>
-                    <div className="mt-auto h-10 bg-white/[0.05] border border-white/10 rounded-lg" />
+                  {/* Phone outer shell */}
+                  <div className="absolute inset-0 rounded-t-[2.2rem] bg-[#2c2c2e] border-2 border-white/35 shadow-[0_32px_80px_rgba(0,0,0,0.6),0_0_0_1px_rgba(255,255,255,0.08)]" />
+                  {/* Side buttons */}
+                  <div className="absolute -left-[3px] top-[20%] w-[3px] h-6 bg-white/30 rounded-l-sm" />
+                  <div className="absolute -left-[3px] top-[30%] w-[3px] h-10 bg-white/30 rounded-l-sm" />
+                  <div className="absolute -right-[3px] top-[25%] w-[3px] h-8 bg-white/30 rounded-r-sm" />
+                  {/* Screen */}
+                  <div className="absolute inset-[4px] rounded-t-[1.9rem] overflow-hidden bg-black">
+                    <img src={src} alt={alt} className="w-full h-full object-cover object-top" />
+                    {/* notch */}
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[30%] h-[3.5%] bg-[#1a1a1a] rounded-b-2xl" />
                   </div>
                 </div>
               ))}
-            </div>
 
-            <span
-              className={`${sectionLabel} absolute bottom-4 left-6 md:left-12 text-white/35`}
-              style={{ fontSize: "10px" }}
-            >
-              App screens placeholder
-            </span>
+            </div>
           </div>
         </div>
       </section>
@@ -153,20 +483,16 @@ export function CaseStudy({ onBack }: Props) {
               SmartThings.
             </p>
           </div>
-          <div className="relative aspect-[4/5] bg-white border border-[#111111]/10 overflow-hidden">
-            <div className="absolute inset-0 flex items-center justify-center p-10">
-              <div className="w-full max-w-[260px] aspect-[9/19] bg-[#FAFAFA] border border-[#111111]/15 rounded-[2rem] p-3 shadow-xl">
-                <div className="w-full h-full rounded-[1.6rem] bg-white p-4 flex flex-col gap-2.5">
-                  <div className="h-2 w-16 bg-[#111111]/15 rounded-full" />
-                  <div className="h-4 w-32 bg-[#111111] rounded-sm" />
-                  <div className="grid grid-cols-2 gap-2 mt-3">
-                    {[0, 1, 2, 3].map((j) => (
-                      <div key={j} className="aspect-square bg-[#111111]/[0.04] border border-[#111111]/10 rounded-lg" />
-                    ))}
-                  </div>
-                  <div className="mt-auto h-10 bg-[#111111]/[0.04] border border-[#111111]/10 rounded-lg" />
-                </div>
-              </div>
+          <div className="flex items-center justify-center">
+            <div className="w-[46%] overflow-hidden pb-6">
+              <video
+                src={productMockup}
+                autoPlay
+                muted
+                loop
+                playsInline
+                className="block w-full scale-[1.1]"
+              />
             </div>
           </div>
         </div>
@@ -186,124 +512,121 @@ export function CaseStudy({ onBack }: Props) {
           grown beyond what its architecture could support.
         </h2>
 
-        <div className="grid md:grid-cols-2 gap-6 md:gap-8">
+        <div className="grid md:grid-cols-2 gap-px bg-[#2A2A2A]">
           {[
             {
+              n: "01",
               t: "Fragmentation",
               d: "Each device category operated differently. A user managing a lock, a light, and a sensor encountered three separate mental models inside a single app.",
             },
             {
+              n: "02",
               t: "Poor Scalability",
               d: "Every new device required a custom build. Engineers started from scratch per launch. The cost of inconsistency compounded over time.",
             },
             {
+              n: "03",
               t: "Automation Complexity",
               d: "Automations were the platform's highest-value feature — and its highest-friction experience. Most users never finished setup.",
             },
-          ].map((c, i) => (
+            {
+              n: "04",
+              t: "Security at a Crossroads",
+              d: "TELUS needed to deliver a compelling self-monitored security product before professional monitoring was ready. The gap between ambition and infrastructure was significant.",
+              highlight: true,
+            },
+          ].map((c) => (
             <div
               key={c.t}
-              className="p-10 md:p-14 bg-[#111111] border border-[#2A2A2A] transition-colors hover:border-white/30"
+              className={`relative group p-10 md:p-14 bg-[#111111] transition-colors duration-300 hover:bg-[#161616] ${c.highlight ? "border-l-2 border-l-white/60" : ""}`}
             >
               <p
-                className={`${sectionLabel} text-white/35 mb-6`}
+                className={`${sectionLabel} mb-8 ${c.highlight ? "text-white/50" : "text-white/25"}`}
                 style={{ fontSize: "11px" }}
               >
-                {String(i + 1).padStart(2, "0")}
+                {c.n}
               </p>
               <h4
-                className="tracking-tight mb-5"
-                style={{ fontSize: "clamp(1.375rem, 2vw, 1.75rem)", fontWeight: 700 }}
+                className="tracking-tight mb-5 leading-[1.1]"
+                style={{ fontSize: "clamp(1.25rem, 1.8vw, 1.625rem)", fontWeight: 700 }}
               >
                 {c.t}
               </h4>
-              <p className="text-white/65 leading-relaxed max-w-[44ch]" style={{ fontSize: "clamp(1rem, 1.2vw, 1.0625rem)" }}>
+              <p
+                className="text-white/55 leading-relaxed"
+                style={{ fontSize: "clamp(0.9375rem, 1.1vw, 1rem)" }}
+              >
                 {c.d}
               </p>
+              {/* subtle bottom line reveal on hover */}
+              <div className="absolute bottom-0 left-10 md:left-14 right-10 md:right-14 h-px bg-white/20 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
             </div>
           ))}
-
-          {/* Full-width strategic card */}
-          <div className="md:col-span-2 relative p-10 md:p-16 bg-[#111111] border border-white/40">
-            <div
-              aria-hidden
-              className="absolute top-0 left-0 w-1 h-full bg-white/80"
-            />
-            <div className="flex flex-wrap items-baseline justify-between gap-4 mb-6">
-              <p
-                className={`${sectionLabel} text-white/40`}
-                style={{ fontSize: "11px" }}
-              >
-                04 · Strategic Pressure
-              </p>
-              <p
-                className={`${sectionLabel} text-white/40`}
-                style={{ fontSize: "11px" }}
-              >
-                Highest stakes
-              </p>
-            </div>
-            <h4
-              className="tracking-[-0.01em] mb-5 max-w-[24ch]"
-              style={{ fontSize: "clamp(1.625rem, 2.6vw, 2.25rem)", fontWeight: 700 }}
-            >
-              Security at a Crossroads
-            </h4>
-            <p
-              className="text-white/70 leading-relaxed max-w-[72ch]"
-              style={{ fontSize: "clamp(1rem, 1.3vw, 1.15rem)" }}
-            >
-              TELUS needed to deliver a compelling self-monitored security product before
-              professional monitoring was ready. The gap between ambition and available
-              infrastructure was significant.
-            </p>
-          </div>
         </div>
 
       </section>
 
       {/* 03 MY ROLE */}
-      <section className="bg-[#FAFAFA] text-[#111111] px-6 md:px-12 py-24 md:py-36">
+      <section className="bg-[#FAFAFA] text-[#111111] px-6 md:px-12 pt-24 md:pt-36 pb-24 md:pb-36">
         <p className={`${sectionLabel} text-[#111111]/50 mb-12`} style={{ fontSize: "12px" }}>
           03 · My Role
         </p>
-        <div className="max-w-[900px]">
-          <p
-            className="tracking-[-0.01em] leading-[1.35] mb-16"
-            style={{ fontSize: "clamp(1.25rem, 2.2vw, 1.75rem)", fontWeight: 500 }}
-          >
-            I served as Design Manager and product design leader across the full TELUS
-            SmartHome+ program, embedded as a Poatek UX Lead within the TELUS design
-            organization.
-          </p>
 
-          <div className="grid md:grid-cols-2 gap-12 md:gap-16 border-t border-[#111111]/10 pt-12">
-            <div>
-              <h4 className="mb-5 tracking-tight" style={{ fontSize: "1.125rem", fontWeight: 700 }}>
-                What was mine
-              </h4>
-              <ul className="space-y-3 text-[#111111]/70">
-                {["Product strategy", "Design direction", "Stakeholder alignment", "Team coordination", "Delivery framing"].map((i) => (
-                  <li key={i} className="flex items-center gap-3">
-                    <span className="w-1.5 h-1.5 bg-[#111111] rounded-full" />
-                    {i}
-                  </li>
-                ))}
-              </ul>
+        <div className="grid md:grid-cols-2 gap-16 md:gap-24 items-start">
+          {/* Left — text */}
+          <div>
+            <p
+              className="tracking-[-0.01em] leading-[1.35] mb-16"
+              style={{ fontSize: "clamp(1.25rem, 2.2vw, 1.75rem)", fontWeight: 500 }}
+            >
+              I served as Design Manager and product design leader across the full TELUS
+              SmartHome+ program, embedded as a Poatek UX Lead within the TELUS design
+              organization.
+            </p>
+
+            <div className="grid grid-cols-2 gap-10 border-t border-[#111111]/10 pt-10">
+              <div>
+                <h4 className="mb-5 tracking-tight" style={{ fontSize: "1rem", fontWeight: 700 }}>
+                  What was mine
+                </h4>
+                <ul className="space-y-3 text-[#111111]/60">
+                  {["Product strategy", "Design direction", "Stakeholder alignment", "Team coordination", "Delivery framing"].map((item) => (
+                    <li key={item} className="flex items-center gap-2.5" style={{ fontSize: "0.9375rem" }}>
+                      <span className="w-1 h-1 bg-[#111111]/40 rounded-full flex-shrink-0" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <h4 className="mb-5 tracking-tight" style={{ fontSize: "1rem", fontWeight: 700 }}>
+                  What was the team's
+                </h4>
+                <ul className="space-y-3 text-[#111111]/60">
+                  {["Execution", "Exploration", "Craft"].map((item) => (
+                    <li key={item} className="flex items-center gap-2.5" style={{ fontSize: "0.9375rem" }}>
+                      <span className="w-1 h-1 bg-[#111111]/40 rounded-full flex-shrink-0" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
-            <div>
-              <h4 className="mb-5 tracking-tight" style={{ fontSize: "1.125rem", fontWeight: 700 }}>
-                What was the team's
-              </h4>
-              <ul className="space-y-3 text-[#111111]/70">
-                {["Execution", "Exploration", "Craft"].map((i) => (
-                  <li key={i} className="flex items-center gap-3">
-                    <span className="w-1.5 h-1.5 bg-[#111111] rounded-full" />
-                    {i}
-                  </li>
-                ))}
-              </ul>
+          </div>
+
+          {/* Right — team photo */}
+          <div className="flex flex-col gap-3">
+            <div className="overflow-hidden">
+              <img
+                src={teamPhoto}
+                alt="TELUS SmartHome+ design team"
+                className="w-full object-cover grayscale contrast-[1.05]"
+                style={{ aspectRatio: "4/3" }}
+              />
             </div>
+            <p className={`${sectionLabel} text-[#111111]/35`} style={{ fontSize: "10px" }}>
+              TELUS SmartHome+ design team — Vancouver, 2025
+            </p>
           </div>
         </div>
       </section>
@@ -317,169 +640,103 @@ export function CaseStudy({ onBack }: Props) {
           className="tracking-[-0.02em] leading-[1.05] mb-12 max-w-[24ch]"
           style={{ fontSize: "clamp(1.75rem, 3.6vw, 2.75rem)", fontWeight: 700 }}
         >
-          A. SDUI — The Architecture Decision
+          A. SDUI — From Device-Centric to Capability-Centric
         </h3>
 
         <p
           className="text-[#111111]/80 leading-relaxed max-w-[64ch] mb-20 md:mb-24"
           style={{ fontSize: "clamp(1.0625rem, 1.5vw, 1.25rem)" }}
         >
-          The most consequential exploration was Server Driven UI. The bet: define a
-          shared component vocabulary — State, Controls, Properties, Actions, Content —
-          and let the backend drive device screens dynamically.
+          The foundational bet was Server Driven UI. Instead of building a screen per
+          device, we shifted the model: each device declares its{" "}
+          <em>capabilities</em> — what it can do — and the frontend renders
+          automatically from a shared component library. The backend drives the UI.
+          No custom engineering per device launch.
         </p>
 
         {/* Before / After panels */}
         <div className="grid md:grid-cols-2 gap-6 md:gap-8 mb-16 md:mb-20">
+
           {/* BEFORE */}
           <SlideIn from="left">
-          <div className="relative p-8 md:p-12 bg-[#1A1A1A] text-white overflow-hidden min-h-[460px] flex flex-col">
-            <div className="flex items-center gap-3 mb-10">
+          <div className="relative bg-[#1A1A1A] text-white flex flex-col overflow-hidden">
+            <div className="flex items-center gap-3 px-8 pt-8 pb-6">
               <span className="w-2 h-2 rounded-full bg-[#E5484D]" />
-              <span
-                className={`${sectionLabel} text-[#E5484D]`}
-                style={{ fontSize: "11px" }}
-              >
-                Before SDUI
+              <span className={`${sectionLabel} text-[#E5484D]`} style={{ fontSize: "11px" }}>
+                Before · Device-Centric
               </span>
             </div>
-
-            <div className="flex-1 flex flex-col gap-4">
-              {[
-                { t: "Lock Screen", d: "Custom implementation", rotate: "-1.5deg", x: "0px" },
-                { t: "Light Screen", d: "Custom implementation", rotate: "1.2deg", x: "14px" },
-                { t: "Sensor Screen", d: "Custom implementation", rotate: "-0.8deg", x: "-6px" },
-              ].map((b) => (
-                <div
-                  key={b.t}
-                  className="p-5 bg-[#0F0F0F] border border-white/10"
-                  style={{ transform: `rotate(${b.rotate}) translateX(${b.x})` }}
-                >
-                  <p className="tracking-tight mb-1" style={{ fontSize: "0.95rem", fontWeight: 600 }}>
-                    {b.t}
-                  </p>
-                  <p className="text-white/50" style={{ fontSize: "0.8125rem" }}>
-                    {b.d}
-                  </p>
-                </div>
-              ))}
+            <div className="flex justify-center px-12 py-8 h-[460px]">
+              <img src={sduiBeforeLight} alt="Light bulb before SDUI" className="h-full object-contain" />
             </div>
-
-            <p
-              className="mt-10 text-white/65 leading-relaxed border-t border-white/10 pt-6"
-              style={{ fontSize: "0.9375rem" }}
-            >
-              Every new device = new screen, new engineering sprint, new inconsistency.
+            <p className="px-8 py-6 text-white/55 leading-relaxed border-t border-white/10" style={{ fontSize: "0.875rem" }}>
+              Each device had its own custom UI. No shared model, no reuse.
             </p>
           </div>
           </SlideIn>
 
           {/* AFTER */}
           <SlideIn from="right" delay={0.1}>
-          <div className="relative p-8 md:p-12 bg-[#222222] text-white overflow-hidden min-h-[460px] flex flex-col">
-            <div className="flex items-center gap-3 mb-10">
+          <div className="relative bg-[#1A1A1A] text-white flex flex-col overflow-hidden">
+            <div className="flex items-center gap-3 px-8 pt-8 pb-6">
               <span className="w-2 h-2 rounded-full bg-[#30A46C]" />
-              <span
-                className={`${sectionLabel} text-[#30A46C]`}
-                style={{ fontSize: "11px" }}
-              >
-                After SDUI
+              <span className={`${sectionLabel} text-[#30A46C]`} style={{ fontSize: "11px" }}>
+                After · Capability-Centric (SDUI)
               </span>
             </div>
-
-            <div className="flex-1 relative flex items-center justify-center">
-              <svg
-                className="absolute inset-0 w-full h-full"
-                viewBox="0 0 400 320"
-                preserveAspectRatio="none"
-                aria-hidden
-              >
-                {[
-                  [200, 160, 80, 50],
-                  [200, 160, 320, 50],
-                  [200, 160, 50, 160],
-                  [200, 160, 350, 160],
-                  [200, 160, 200, 290],
-                ].map(([x1, y1, x2, y2], i) => (
-                  <line
-                    key={i}
-                    x1={x1}
-                    y1={y1}
-                    x2={x2}
-                    y2={y2}
-                    stroke="rgba(255,255,255,0.18)"
-                    strokeWidth="1"
-                  />
-                ))}
-              </svg>
-
-              <div className="relative z-10 grid grid-cols-3 gap-3 items-center w-full max-w-[380px]">
-                <div className="text-center">
-                  <div className="px-3 py-2 bg-[#0F0F0F] border border-white/15 tracking-tight" style={{ fontSize: "0.75rem" }}>
-                    State
-                  </div>
-                </div>
-                <div className="row-span-3 flex items-center justify-center">
-                  <div className="px-4 py-6 bg-white text-[#111111] text-center border border-white shadow-2xl">
-                    <p className="tracking-tight" style={{ fontSize: "0.8125rem", fontWeight: 700 }}>
-                      Shared
-                      <br />
-                      Component
-                      <br />
-                      Layer
-                    </p>
-                  </div>
-                </div>
-                <div className="text-center">
-                  <div className="px-3 py-2 bg-[#0F0F0F] border border-white/15 tracking-tight" style={{ fontSize: "0.75rem" }}>
-                    Controls
-                  </div>
-                </div>
-
-                <div className="text-center">
-                  <div className="px-3 py-2 bg-[#0F0F0F] border border-white/15 tracking-tight" style={{ fontSize: "0.75rem" }}>
-                    Properties
-                  </div>
-                </div>
-                <div className="text-center">
-                  <div className="px-3 py-2 bg-[#0F0F0F] border border-white/15 tracking-tight" style={{ fontSize: "0.75rem" }}>
-                    Actions
-                  </div>
-                </div>
-
-                <div className="col-start-2 text-center">
-                  <div className="px-3 py-2 bg-[#0F0F0F] border border-white/15 tracking-tight" style={{ fontSize: "0.75rem" }}>
-                    Content
-                  </div>
-                </div>
-              </div>
+            <div className="flex justify-center px-12 py-8 h-[460px]">
+              <img src={sduiAfterLight} alt="Light bulb after SDUI" className="h-full object-contain" />
             </div>
-
-            <p
-              className="mt-10 text-white/75 leading-relaxed border-t border-white/10 pt-6"
-              style={{ fontSize: "0.9375rem" }}
-            >
-              Any device. Backend config. No custom front-end engineering.
+            <p className="px-8 py-6 text-white/75 leading-relaxed border-t border-white/10" style={{ fontSize: "0.875rem" }}>
+              Capabilities drive the UI — any device, same framework.
             </p>
           </div>
           </SlideIn>
         </div>
 
+        {/* Before / After — comparison slider (white bg) */}
+        <ScaleIn className="mb-16 md:mb-20">
+          <div className="bg-white border border-[#111111]/08 overflow-hidden">
+            <div className="flex items-center justify-between px-8 pt-7 pb-5 border-b border-[#111111]/06">
+              <div className="flex items-center gap-6">
+                <span className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#E5484D]" />
+                  <span className={`${sectionLabel} text-[#E5484D]`} style={{ fontSize: "11px" }}>Before · Device-Centric</span>
+                </span>
+                <span className="text-[#111111]/20" aria-hidden>→</span>
+                <span className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#30A46C]" />
+                  <span className={`${sectionLabel} text-[#30A46C]`} style={{ fontSize: "11px" }}>After · Capability-Centric (SDUI)</span>
+                </span>
+              </div>
+              <span className="hidden md:block text-[#111111]/30 tracking-tight" style={{ fontSize: "11px" }}>← drag to compare →</span>
+            </div>
+            <div className="bg-[#F7F7F7] px-12 md:px-24 py-12">
+              <ComparisonSlider
+                before={sduiBeforeScreens}
+                after={sduiAfterScreens}
+                beforeLabel="Before"
+                afterLabel="After"
+              />
+            </div>
+            <p className="px-8 py-5 text-[#111111]/45 leading-relaxed border-t border-[#111111]/06" style={{ fontSize: "0.8125rem" }}>
+              Drag the slider to compare device-centric vs. capability-centric UI across the same 4 screens.
+            </p>
+          </div>
+        </ScaleIn>
+
         {/* Leadership decision callout */}
         <div className="relative p-10 md:p-16 bg-[#111111] text-white border border-white/30">
-          <p
-            className={`${sectionLabel} text-white/40 mb-6`}
-            style={{ fontSize: "11px" }}
-          >
+          <p className={`${sectionLabel} text-white/40 mb-6`} style={{ fontSize: "11px" }}>
             Leadership Decision
           </p>
           <p
             className="tracking-[-0.015em] leading-[1.25] max-w-[60ch]"
             style={{ fontSize: "clamp(1.25rem, 2.2vw, 1.875rem)", fontWeight: 500 }}
           >
-            The key call: protect the SDUI workstream from being disrupted by urgent
-            security requests mid-stream. Disrupting a foundational build to fix an
-            urgent problem almost always costs more than it saves.
+            The key call: protect the SDUI workstream from urgent security requests
+            mid-stream. Disrupting a foundational build to fix an urgent problem
+            almost always costs more than it saves.
           </p>
         </div>
 
@@ -575,8 +832,155 @@ export function CaseStudy({ onBack }: Props) {
             </div>
           </div>
 
+          {/* Home/Away screen showcase */}
+          <div className="mt-16 md:mt-20">
+            <p className={`${sectionLabel} text-white/40 mb-10`} style={{ fontSize: "11px" }}>
+              The Home/Away model in product
+            </p>
+            {(() => {
+              const screens = [
+                { src: homeAway01, label: "Away state", sub: "Home screen adapts — cameras + sensors surfaced" },
+                { src: homeAway02, label: "Smart notifications", sub: "Away active, Home quieter — critical always on" },
+                { src: homeAway03, label: "Home occupancy", sub: "One tap to switch — simple mental model" },
+                { src: homeAway04, label: "State confirmed", sub: "Contextual toast — zero friction feedback" },
+              ];
+              return (
+                <>
+                  {/* Images + arrows row */}
+                  <div className="flex items-center">
+                    {screens.map(({ src, label }, i) => (
+                      <>
+                        <Reveal key={label} delay={i * 0.08} y={20} className="flex-1 min-w-0">
+                          <div className="w-full aspect-[9/19] overflow-hidden">
+                            <img src={src} alt={label} className="w-full h-full object-contain" />
+                          </div>
+                        </Reveal>
+                        {i < screens.length - 1 && (
+                          <div key={`arrow-${i}`} className="flex-shrink-0 px-2 md:px-3">
+                            <ArrowRight className="w-4 h-4 text-white/25" />
+                          </div>
+                        )}
+                      </>
+                    ))}
+                  </div>
+                  {/* Labels row */}
+                  <div className="grid grid-cols-4 mt-4">
+                    {screens.map(({ label, sub }) => (
+                      <div key={label} className="text-center px-1">
+                        <p className="text-white/80 tracking-tight leading-snug" style={{ fontSize: "0.8125rem", fontWeight: 600 }}>{label}</p>
+                        <p className="text-white/40 leading-snug mt-1" style={{ fontSize: "0.75rem" }}>{sub}</p>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              );
+            })()}
+          </div>
+
+          {/* Critical vs Informational notification tiers */}
+          <div className="mt-28 md:mt-36">
+            <p className="uppercase tracking-[0.22em] text-white/40 mb-16 text-center" style={{ fontSize: "11px" }}>
+              Critical vs. informational notification tiers
+            </p>
+            <div className="pt-16 pb-8 overflow-visible">
+              <NotificationTiers />
+            </div>
+          </div>
+
+          {/* Jarvis-assisted setup */}
+          <div className="mt-32 md:mt-40">
+            <p className={`${sectionLabel} text-white/40 mb-10 text-center`} style={{ fontSize: "11px" }}>
+              Jarvis-assisted setup for advanced automation
+            </p>
+
+            {/* Flow 1 — 4 screens */}
+            <div className="mb-24 md:mb-32">
+              <p className="uppercase tracking-[0.16em] text-white/25 mb-10 text-center" style={{ fontSize: "11px" }}>
+                Creating an automation in one sentence
+              </p>
+              {(() => {
+                const flow1 = [
+                  { src: jarvis01, label: "Jarvis home", sub: "Starting point — quick action suggestions" },
+                  { src: jarvis02, label: "Intent understood", sub: "Natural language parsed into a routine" },
+                  { src: jarvis03, label: "Routine proposed", sub: "Full preview before saving" },
+                  { src: jarvis04, label: "Confirmed", sub: "One tap to confirm — done" },
+                ];
+                return (
+                  <>
+                    <div className="flex items-center">
+                      {flow1.map(({ src, label }, i) => (
+                        <>
+                          <Reveal key={label} delay={i * 0.08} y={20} className="flex-1 min-w-0">
+                            <div className="w-full aspect-[9/19] overflow-hidden">
+                              <img src={src} alt={label} className="w-full h-full object-contain" />
+                            </div>
+                          </Reveal>
+                          {i < flow1.length - 1 && (
+                            <div key={`arrow-${i}`} className="flex-shrink-0 px-2 md:px-3">
+                              <ArrowRight className="w-4 h-4 text-white/25" />
+                            </div>
+                          )}
+                        </>
+                      ))}
+                    </div>
+                    <div className="grid grid-cols-4 mt-4">
+                      {flow1.map(({ label, sub }) => (
+                        <div key={label} className="text-center px-1">
+                          <p className="text-white/80 tracking-tight leading-snug" style={{ fontSize: "0.8125rem", fontWeight: 600 }}>{label}</p>
+                          <p className="text-white/40 leading-snug mt-1" style={{ fontSize: "0.75rem" }}>{sub}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                );
+              })()}
+            </div>
+
+            {/* Flow 2 — 3 screens, same item width as flow 1 (w-3/4 container + flex-1) */}
+            <div>
+              <p className="uppercase tracking-[0.16em] text-white/25 mb-10 text-center" style={{ fontSize: "11px" }}>
+                Controlling a device conversationally
+              </p>
+              {(() => {
+                const flow2 = [
+                  { src: jarvis01, label: "Jarvis home", sub: "Starting point — quick action suggestions" },
+                  { src: jarvis05, label: "Intent understood", sub: "Device and action identified instantly" },
+                  { src: jarvis06, label: "Device adjusted", sub: "Confirmation with current state" },
+                ];
+                return (
+                  <>
+                    <div className="w-3/4 flex items-center mx-auto">
+                      {flow2.map(({ src, label }, i) => (
+                        <>
+                          <Reveal key={label} delay={i * 0.08} y={20} className="flex-1 min-w-0">
+                            <div className="w-full aspect-[9/19] overflow-hidden">
+                              <img src={src} alt={label} className="w-full h-full object-contain" />
+                            </div>
+                          </Reveal>
+                          {i < flow2.length - 1 && (
+                            <div key={`arrow-${i}`} className="flex-shrink-0 px-2 md:px-3">
+                              <ArrowRight className="w-4 h-4 text-white/25" />
+                            </div>
+                          )}
+                        </>
+                      ))}
+                    </div>
+                    <div className="w-3/4 grid grid-cols-3 mt-4 mx-auto">
+                      {flow2.map(({ label, sub }) => (
+                        <div key={label} className="text-center px-1">
+                          <p className="text-white/80 tracking-tight leading-snug" style={{ fontSize: "0.8125rem", fontWeight: 600 }}>{label}</p>
+                          <p className="text-white/40 leading-snug mt-1" style={{ fontSize: "0.75rem" }}>{sub}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                );
+              })()}
+            </div>
+          </div>
+
           {/* Milestone callout */}
-          <div className="relative mt-16 md:mt-20 p-10 md:p-14 bg-[#111111] border border-white/40">
+          <div className="relative mt-32 md:mt-40 p-10 md:p-14 bg-[#111111] border border-white/40">
             <div
               aria-hidden
               className="absolute top-0 left-0 w-1 h-full bg-white/80"
@@ -607,45 +1011,45 @@ export function CaseStudy({ onBack }: Props) {
 
       </section>
 
-      {/* 04 SOLUTION — C. Jarvis 2.0 (light) */}
-      <section className="relative bg-[#FAFAFA] text-[#111111] px-6 md:px-12 py-24 md:py-36 overflow-hidden">
+      {/* 04 SOLUTION — C. Generative UI (light) */}
+      <section className="relative bg-[#FAFAFA] text-[#111111] px-6 md:px-12 pt-24 md:pt-36 pb-0 overflow-hidden">
         <h3
           className="tracking-[-0.02em] leading-[1.05] mb-16 md:mb-20 max-w-[24ch]"
           style={{ fontSize: "clamp(1.75rem, 3.6vw, 2.75rem)", fontWeight: 700 }}
         >
-          C. Jarvis 2.0 — Designing an Operating Layer
+          C. Generative UI — From Static Interface to Adaptive Experience
         </h3>
 
         {/* Direction cards */}
         <div className="grid sm:grid-cols-2 gap-5 md:gap-6 mb-24 md:mb-32">
           {[
             {
-              t: "AI as Search",
-              d: "Users ask, Jarvis answers.",
-              tag: "Information without action",
+              t: "Static UI",
+              d: "Same experience for every user, every time. No awareness of context, behavior, or intent.",
+              tag: "The problem we were solving",
               tagTone: "muted",
-              icon: "🔍",
+              icon: "⬜",
             },
             {
-              t: "AI as Navigator",
-              d: "Jarvis helps users find screens.",
-              tag: "Still requires traditional workflows",
+              t: "Reactive UI",
+              d: "The interface responds to explicit user requests. Still requires users to configure everything.",
+              tag: "Higher effort, lower return",
               tagTone: "muted",
-              icon: "🧭",
+              icon: "↩️",
             },
             {
-              t: "AI as Assistant",
-              d: "Jarvis executes tasks.",
-              tag: "Higher value, but reactive",
+              t: "Contextual UI",
+              d: "The interface adapts to some signals — time, location, device state — but within fixed layouts.",
+              tag: "Partial — no intent layer",
               tagTone: "yellow",
-              icon: "🤝",
+              icon: "📡",
             },
             {
-              t: "AI as Operating Layer",
-              d: "Users describe goals. Jarvis translates intent into actions and workflows.",
+              t: "Generative UI",
+              d: "Structured, signal-driven adaptation. The interface evolves with the user while preserving consistency and control.",
               tag: "Transformational",
               tagTone: "green",
-              icon: "✨",
+              icon: "✦",
               chosen: true,
             },
           ].map((o) => {
@@ -715,158 +1119,71 @@ export function CaseStudy({ onBack }: Props) {
           })}
         </div>
 
-        {/* Principle quote */}
-        <div className="relative bg-[#111111] text-white py-20 md:py-32 px-6 md:px-12 mb-24 md:mb-32">
-          <blockquote
-            className="max-w-[28ch] mx-auto text-center italic tracking-[-0.015em] leading-[1.15]"
-            style={{ fontSize: "clamp(1.75rem, 4.2vw, 3.25rem)", fontWeight: 400 }}
-          >
-            "Do first, refine later."
-            <span className="block mt-6 text-white/75 not-italic" style={{ fontSize: "clamp(1.125rem, 1.8vw, 1.5rem)", fontWeight: 400 }}>
-              When intent is clear, Jarvis acts. The user adjusts if needed.
-            </span>
+        {/* Principle quote — floating */}
+        <div className="py-24 md:py-32 mb-8 md:mb-12 text-center">
+          <blockquote className="mx-auto" style={{ maxWidth: "860px" }}>
+            <p
+              className="leading-[1.1] text-[#111111]"
+              style={{
+                fontSize: "clamp(1.75rem, 3.6vw, 3rem)",
+                fontWeight: 700,
+                fontStyle: "italic",
+                letterSpacing: "-0.025em",
+              }}
+            >
+              "The interface should adapt to the user.{" "}
+              <span style={{ color: "#111111", opacity: 0.3 }}>
+                Not the other way around."
+              </span>
+            </p>
+            <p
+              className="mt-7 mx-auto text-[#111111]/45 leading-relaxed"
+              style={{
+                fontSize: "clamp(0.875rem, 1.2vw, 1rem)",
+                fontWeight: 400,
+                maxWidth: "48ch",
+                letterSpacing: "0.01em",
+              }}
+            >
+              GenUI is not UI generation. It's structured adaptation —
+              built on guardrails, driven by signals.
+            </p>
           </blockquote>
         </div>
 
-        {/* Before / After automation */}
-        <p
-          className={`${sectionLabel} text-[#111111]/50 mb-10`}
-          style={{ fontSize: "12px" }}
-        >
-          What automation creation looked like — before and after Jarvis
-        </p>
-
-        <div className="grid md:grid-cols-2 gap-6 md:gap-8 mb-16 md:mb-20">
-          {/* BEFORE */}
-          <SlideIn from="left">
-          <div className="p-8 md:p-10 bg-[#1A1A1A] text-white flex flex-col">
-            <div className="flex items-center gap-3 mb-10">
-              <span className="w-2 h-2 rounded-full bg-[#E5484D]" />
-              <span
-                className={`${sectionLabel} text-[#E5484D]`}
-                style={{ fontSize: "11px" }}
-              >
-                Before Jarvis · 6 steps
-              </span>
-            </div>
-
-            <ol className="space-y-3 flex-1">
-              {[
-                "Navigate to Automations",
-                "Select Trigger",
-                "Select Conditions",
-                "Select Devices",
-                "Configure Actions",
-                "Save",
-              ].map((s, i, arr) => (
-                <li key={s}>
-                  <div className="flex items-center gap-4 p-4 bg-[#0F0F0F] border border-white/10">
-                    <span
-                      className="w-7 h-7 flex items-center justify-center border border-white/20 tracking-tight"
-                      style={{ fontSize: "0.75rem" }}
-                    >
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <span className="text-white/85 tracking-tight" style={{ fontSize: "0.95rem" }}>
-                      {s}
-                    </span>
-                  </div>
-                  {i < arr.length - 1 && (
-                    <div className="flex justify-center my-1.5">
-                      <ArrowRight className="w-3 h-3 text-white/25 rotate-90" />
-                    </div>
-                  )}
-                </li>
-              ))}
-            </ol>
-
-            <p
-              className="mt-10 text-white/65 leading-relaxed border-t border-white/10 pt-6"
-              style={{ fontSize: "0.9375rem" }}
-            >
-              Six steps. Each requiring the user to understand a system concept.
+        {/* Interactive Moments — GenUI prototype (native, no iframe) */}
+        <div className="-mx-6 md:-mx-12 pb-0 mb-0" style={{ background: "#ffffff" }}>
+          <div className="px-6 md:px-12 pt-16 md:pt-20 pb-6">
+            <p className={`${sectionLabel} text-[#111111]/40`} style={{ fontSize: "11px" }}>
+              Interactive prototype — GenUI adaptive moments
             </p>
           </div>
-          </SlideIn>
-
-          {/* AFTER */}
-          <SlideIn from="right" delay={0.1}>
-          <div className="p-8 md:p-10 bg-[#1A1A1A] text-white flex flex-col">
-            <div className="flex items-center gap-3 mb-10">
-              <span className="w-2 h-2 rounded-full bg-[#30A46C]" />
-              <span
-                className={`${sectionLabel} text-[#30A46C]`}
-                style={{ fontSize: "11px" }}
-              >
-                With Jarvis · 1 sentence
-              </span>
-            </div>
-
-            <div className="flex-1 flex flex-col justify-center gap-6">
-              {/* Speech bubble */}
-              <div className="relative p-6 md:p-8 bg-white text-[#111111] rounded-[20px] rounded-bl-sm">
-                <p
-                  className="italic leading-snug tracking-[-0.01em]"
-                  style={{ fontSize: "clamp(1.125rem, 1.7vw, 1.375rem)", fontWeight: 500 }}
-                >
-                  "I want my porch lights to turn on when I arrive home."
-                </p>
-              </div>
-
-              <div className="flex justify-center">
-                <ArrowRight className="w-5 h-5 text-white/40 rotate-90" />
-              </div>
-
-              {/* Result block */}
-              <div className="p-6 md:p-8 bg-[#0F0F0F] border border-[#30A46C]/40">
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="w-6 h-6 rounded-full bg-[#30A46C] text-[#111111] flex items-center justify-center" style={{ fontSize: "12px", fontWeight: 700 }}>
-                    ✓
-                  </span>
-                  <span className="tracking-tight" style={{ fontSize: "1.0625rem", fontWeight: 600 }}>
-                    Automation created
-                  </span>
-                </div>
-                <p className="text-white/55 leading-relaxed" style={{ fontSize: "0.8125rem" }}>
-                  Jarvis identified devices · mapped the trigger · constructed the
-                  automation · requested confirmation
-                </p>
-              </div>
-            </div>
-          </div>
-          </SlideIn>
+          <GenUIEmbed />
         </div>
 
-        <p
-          className="text-center mx-auto max-w-[28ch] tracking-[-0.015em] leading-[1.2]"
-          style={{ fontSize: "clamp(1.5rem, 3vw, 2.25rem)", fontWeight: 500 }}
-        >
-          The user never sees triggers, conditions, or actions as separate concepts.
-          They describe a goal.
-        </p>
       </section>
 
       {/* 05 RESULTS */}
-      <section className="bg-[#111111] text-white px-6 md:px-12 py-24 md:py-36">
+      <section className="bg-[#111111] text-white px-6 md:px-12 py-24 md:py-36" style={{ marginTop: 0 }}>
         <p className={`${sectionLabel} text-white/50 mb-16 md:mb-20`} style={{ fontSize: "12px" }}>
           05 · Results
         </p>
 
-        {/* Milestone cards */}
-        <div className="space-y-6 md:space-y-8 mb-24 md:mb-32">
+        {/* Milestone cards — 2 × 2 grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-24 md:mb-32">
           {[
             {
               eyebrow: "SDUI Foundation",
               accent: "#2A9CB5",
               headline: "Platform scalability unlocked",
-              body: "A shared component system replaced device-specific implementations. New device launches now require backend configuration — not front-end engineering sprints. Foundation for Jarvis integration established.",
+              body: "A shared component system replaced device-specific implementations. New device launches now require backend configuration — not front-end engineering sprints.",
               tag: "Shipped",
             },
             {
               eyebrow: "DIY Security — September 2025",
               accent: "#E8A33D",
               headline: "Self-monitored security brought to market",
-              body: "TELUS enabled a viable security offering before professional monitoring was commercially available — protecting business continuity and delivering real customer value during the transition.",
+              body: "TELUS enabled a viable security offering before professional monitoring was commercially available — protecting business continuity and delivering real customer value.",
               tag: "MVP Reached · Q1 2026 Rollout",
             },
             {
@@ -876,46 +1193,50 @@ export function CaseStudy({ onBack }: Props) {
               body: "Conversational automation creation, device control, and context-aware onboarding shipped across all SmartHome+ entry points. GA planned H2 2026.",
               tag: "Early Market Testing",
             },
+            {
+              eyebrow: "Generative UI — In Progress",
+              accent: "#9B8EF8",
+              headline: "Signal-driven adaptation ready for pilot",
+              body: "GenUI framework validated through internal testing. Adaptive surface logic, intent signals, and guardrail system handed off for platform integration.",
+              tag: "In Development",
+            },
           ].map((r, i) => (
             <article
               key={r.eyebrow}
-              className="relative grid md:grid-cols-[1fr_auto] gap-8 md:gap-12 items-end p-8 md:p-14 bg-[#1A1A1A] border border-white/10 transition-all hover:border-white/25 hover:-translate-y-0.5"
+              className="relative flex flex-col justify-between gap-10 p-8 md:p-12 bg-[#1A1A1A] border border-white/10 transition-all hover:border-white/25 hover:-translate-y-0.5"
             >
               <div
                 aria-hidden
                 className="absolute top-0 left-0 w-1 h-full"
                 style={{ background: r.accent }}
               />
-              <div className="max-w-[68ch]">
-                <div className="flex items-center gap-4 mb-6">
-                  <span
-                    className={`${sectionLabel} text-white/40`}
-                    style={{ fontSize: "11px" }}
-                  >
-                    0{i + 1} · {r.eyebrow}
-                  </span>
-                </div>
+              <div>
+                <span
+                  className={`${sectionLabel} text-white/40 block mb-6`}
+                  style={{ fontSize: "11px" }}
+                >
+                  0{i + 1} · {r.eyebrow}
+                </span>
                 <h4
-                  className="tracking-[-0.02em] leading-[1.1] mb-6 max-w-[22ch]"
-                  style={{ fontSize: "clamp(1.5rem, 3vw, 2.25rem)", fontWeight: 700 }}
+                  className="tracking-[-0.02em] leading-[1.1] mb-5"
+                  style={{ fontSize: "clamp(1.375rem, 2.4vw, 1.875rem)", fontWeight: 700 }}
                 >
                   {r.headline}
                 </h4>
                 <p
-                  className="text-white/70 leading-relaxed"
-                  style={{ fontSize: "clamp(1rem, 1.25vw, 1.125rem)" }}
+                  className="text-white/60 leading-relaxed"
+                  style={{ fontSize: "clamp(0.9375rem, 1.1vw, 1rem)" }}
                 >
                   {r.body}
                 </p>
               </div>
-
-              <div className="md:text-right md:self-start">
+              <div>
                 <span
                   className="inline-flex items-center gap-2 px-4 py-2.5 border tracking-tight"
                   style={{
                     fontSize: "12px",
                     color: r.accent,
-                    borderColor: `${r.accent}66`,
+                    borderColor: `${r.accent}55`,
                   }}
                 >
                   <span
@@ -1002,96 +1323,70 @@ export function CaseStudy({ onBack }: Props) {
       </section>
 
       {/* 06 LEARNINGS */}
-      <section className="bg-[#111111] text-white px-6 md:px-12 pt-24 md:pt-36 pb-12 md:pb-16">
-        <p className={`${sectionLabel} text-white/50 mb-12`} style={{ fontSize: "12px" }}>
+      <section className="bg-[#111111] text-white px-6 md:px-12 pt-24 md:pt-36 pb-24 md:pb-36">
+        <p className={`${sectionLabel} text-white/50 mb-16 md:mb-20`} style={{ fontSize: "12px" }}>
           06 · Key Learnings
         </p>
-      </section>
 
-      {(() => {
-        const learnings = [
-          {
-            t: "Scalability is a design problem, not just an engineering one.",
-            d: "The decision to invest in SDUI foundations before adding more device-specific screens was a design strategy call as much as a technical one. Architecture decisions create enormous product leverage — or enormous debt.",
-          },
-          {
-            t: "Alignment is often harder than the design itself.",
-            d: "The most difficult work on this program wasn't designing screens or interaction models. It was getting Design, Product, Engineering, Architecture, and external partners to agree on what we were building and why.",
-          },
-          {
-            t: "Treat ambiguity as a design input.",
-            d: "When professional monitoring was delayed, DIY Security's scope became genuinely unclear. Rather than waiting for clarity, I reframed the work as an enablement phase — foundations before execution.",
-          },
-          {
-            t: "Protecting team focus is a strategic decision.",
-            d: "Resource allocation decisions — who works on what, and who is protected from context-switching — have as much impact on outcomes as design decisions.",
-          },
-          {
-            t: "AI should reduce complexity, not add to it.",
-            d: "The Jarvis principle 'do first, refine later' was a response to a real user insight: people want their home to work, not to learn how an AI assistant thinks.",
-          },
-          {
-            t: "Security design is trust design.",
-            d: "Every decision about when Jarvis acts immediately vs. asks for confirmation, how error states communicate severity — these are trust decisions as much as UX decisions.",
-          },
-          {
-            t: "The operating model is part of the design.",
-            d: "Jarvis 2.0's quality depended as much on establishing a functioning review process between TELUS and Area 22 as it did on the interaction model itself.",
-          },
-        ];
-        return learnings.map((l, i) => {
-          const dark = i % 2 === 0;
-          return (
-            <section
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+          {[
+            {
+              t: "Scalability is a design problem, not just an engineering one.",
+              d: "The decision to invest in SDUI foundations before adding more device-specific screens was a design strategy call as much as a technical one. Architecture decisions create enormous product leverage — or enormous debt.",
+            },
+            {
+              t: "Alignment is often harder than the design itself.",
+              d: "The most difficult work wasn't designing screens or interaction models. It was getting Design, Product, Engineering, Architecture, and external partners to agree on what we were building and why.",
+            },
+            {
+              t: "Treat ambiguity as a design input.",
+              d: "When professional monitoring was delayed, DIY Security's scope became genuinely unclear. Rather than waiting for clarity, I reframed the work as an enablement phase — foundations before execution.",
+            },
+            {
+              t: "Protecting team focus is a strategic decision.",
+              d: "Resource allocation decisions — who works on what, and who is protected from context-switching — have as much impact on outcomes as design decisions.",
+            },
+            {
+              t: "AI should reduce complexity, not add to it.",
+              d: "The Jarvis principle 'do first, refine later' was a response to a real user insight: people want their home to work, not to learn how an AI assistant thinks.",
+            },
+            {
+              t: "Security design is trust design.",
+              d: "Every decision about when Jarvis acts immediately vs. asks for confirmation, how error states communicate severity — these are trust decisions as much as UX decisions.",
+            },
+            {
+              t: "The operating model is part of the design.",
+              d: "Jarvis 2.0's quality depended as much on establishing a functioning review process between TELUS and Area 22 as it did on the interaction model itself.",
+            },
+          ].map((l, i) => (
+            <article
               key={l.t}
-              className={`${
-                dark ? "bg-[#111111] text-white" : "bg-[#FAFAFA] text-[#111111]"
-              } px-6 md:px-12 py-20 md:py-28`}
+              className="flex flex-col gap-6 p-8 md:p-12 bg-[#1A1A1A] border border-white/10 transition-all hover:border-white/25 hover:-translate-y-0.5"
             >
-              <article className="grid md:grid-cols-[1fr_2fr] gap-10 md:gap-20 items-start max-w-[1300px]">
-                <div className="flex items-start gap-4">
-                  <span
-                    className={`tracking-[-0.04em] leading-none ${
-                      dark ? "text-white/15" : "text-[#111111]/15"
-                    }`}
-                    style={{ fontSize: "clamp(5rem, 12vw, 10rem)", fontWeight: 700 }}
-                  >
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <span
-                    className={`${sectionLabel} mt-4 ${
-                      dark ? "text-white/40" : "text-[#111111]/40"
-                    }`}
-                    style={{ fontSize: "11px" }}
-                  >
-                    Learning
-                  </span>
-                </div>
-
-                <div className="md:pt-6">
-                  <h3
-                    className="tracking-[-0.02em] leading-[1.1] mb-6 max-w-[28ch]"
-                    style={{
-                      fontSize: "clamp(1.5rem, 2.8vw, 2.25rem)",
-                      fontWeight: 700,
-                    }}
-                  >
-                    {l.t}
-                  </h3>
-                  <p
-                    className={`leading-[1.55] max-w-[58ch] ${
-                      dark ? "text-white/65" : "text-[#111111]/65"
-                    }`}
-                    style={{ fontSize: "clamp(1rem, 1.3vw, 1.15rem)" }}
-                  >
-                    {l.d}
-                  </p>
-                </div>
-              </article>
-            </section>
-          );
-        });
-      })()}
+              <span
+                className="text-white/15 tracking-[-0.04em] leading-none"
+                style={{ fontSize: "clamp(3rem, 6vw, 5rem)", fontWeight: 700 }}
+              >
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <div>
+                <h3
+                  className="tracking-[-0.02em] leading-[1.1] mb-4"
+                  style={{ fontSize: "clamp(1.125rem, 1.8vw, 1.375rem)", fontWeight: 700 }}
+                >
+                  {l.t}
+                </h3>
+                <p
+                  className="text-white/60 leading-relaxed"
+                  style={{ fontSize: "clamp(0.9375rem, 1.1vw, 1rem)" }}
+                >
+                  {l.d}
+                </p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
 
       {/* Closing statement */}
       <section className="bg-[#111111] text-white px-6 md:px-12 py-32 md:py-48">

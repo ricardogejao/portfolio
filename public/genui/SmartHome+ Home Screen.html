@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en" data-brand="telus" data-platform="ios">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SmartHome+ · Home screen</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+<link id="cds-token-brand" rel="stylesheet" href="src/tokens/brand-telus.css">
+<link id="cds-token-platform" rel="stylesheet" href="src/tokens/platform-ios.css">
+<script>window.CDS_TOKEN_REPO = null;</script>
+<script src="src/tokens/loader.js"></script>
+<link rel="stylesheet" href="src/styles.css">
+
+<style>
+  html, body { margin: 0; padding: 0; }
+  body { background: var(--background-app, #fff); min-height: 100vh; }
+</style>
+</head>
+<body>
+
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<!-- CDS infrastructure -->
+<script src="src/tokens.js"></script>
+<script src="src/icon-data.js"></script>
+<script src="src/icons.js"></script>
+<script src="src/icon-meta.js"></script>
+<script type="text/babel" src="src/icon-renderer.jsx"></script>
+
+<!-- CDS components -->
+<script type="text/babel" src="src/feedback-caption.jsx"></script>
+<script type="text/babel" src="src/text-input-field.jsx"></script>
+<script type="text/babel" src="src/checkbox.jsx"></script>
+<script type="text/babel" src="src/banner.jsx"></script>
+<script type="text/babel" src="src/button.jsx"></script>
+<script type="text/babel" src="src/toggle-button.jsx"></script>
+<script type="text/babel" src="src/device-tile.jsx"></script>
+<script type="text/babel" src="src/pill.jsx"></script>
+<script type="text/babel" src="src/tag.jsx"></script>
+<script type="text/babel" src="src/snackbar.jsx"></script>
+<script type="text/babel" src="src/ai-assistant.jsx"></script>
+<script type="text/babel" src="src/app-nav.jsx"></script>
+
+<!-- iOS frame (status bar only) -->
+<script type="text/babel" src="frames/ios-frame.jsx"></script>
+
+<!-- Tweaks shell -->
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+
+<!-- App -->
+<script type="text/babel" src="src/home-screen.jsx"></script>
+
+<script type="text/babel">
+(function () {
+  const { useState, useEffect } = React;
+  const {
+    IOSStatusBar, HomeScreen,
+    TweaksPanel, useTweaks, TweakSection, TweakRadio, TweakToggle,
+  } = window;
+
+  const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+    "brand": "telus",
+    "platform": "ios",
+    "ai": true,
+    "securityState": "disarmed",
+    "showAi": true
+  }/*EDITMODE-END*/;
+
+  function applyTheme(brand, platform) {
+    document.documentElement.dataset.brand = brand;
+    document.documentElement.dataset.platform = platform;
+    window.swapTokens && window.swapTokens(brand, platform);
+  }
+
+  function Phone({ children }) {
+    return (
+      <div
+        data-screen-label="01 Home"
+        style={{
+          width: 390, height: 844,
+          borderRadius: 54,
+          position: "relative",
+          overflow: "hidden",
+          background: "var(--background-app)",
+          boxShadow: "0 50px 110px rgba(0,0,0,0.18), 0 0 0 8px #0a0a0a, 0 0 0 9px rgba(255,255,255,0.04), 0 30px 80px rgba(0,0,0,0.12)",
+          fontFamily: "var(--platform-font-default, var(--platform-font))",
+          WebkitFontSmoothing: "antialiased",
+        }}
+      >
+        {/* dynamic island */}
+        <div style={{
+          position: "absolute", top: 11, left: "50%", transform: "translateX(-50%)",
+          width: 122, height: 36, borderRadius: 22, background: "#000", zIndex: 50,
+        }}/>
+        {/* status bar */}
+        <div style={{ position: "absolute", top: 0, left: 0, right: 0, zIndex: 10 }}>
+          <IOSStatusBar dark={false}/>
+        </div>
+        {/* content */}
+        {children}
+        {/* home indicator */}
+        <div style={{
+          position: "absolute", bottom: 8, left: 0, right: 0,
+          display: "flex", justifyContent: "center", pointerEvents: "none", zIndex: 60,
+        }}>
+          <div style={{ width: 134, height: 5, borderRadius: 100, background: "rgba(0,0,0,0.3)" }}/>
+        </div>
+      </div>
+    );
+  }
+
+  function Tweaks({ tweaks, setTweak }) {
+    return (
+      <TweaksPanel title="Tweaks">
+        <TweakSection label="Brand">
+          <TweakRadio label="System"
+            value={tweaks.brand}
+            options={[{ value: "telus", label: "TELUS" }, { value: "homi", label: "Homi" }]}
+            onChange={(v) => setTweak("brand", v)}/>
+          <TweakRadio label="Platform"
+            value={tweaks.platform}
+            options={[{ value: "ios", label: "iOS" }, { value: "android", label: "Android" }]}
+            onChange={(v) => setTweak("platform", v)}/>
+        </TweakSection>
+        <TweakSection label="Security state">
+          <TweakRadio label="Hero"
+            value={tweaks.securityState}
+            options={[
+              { value: "disarmed",    label: "Disarmed" },
+              { value: "armed-away", label: "Armed Away" },
+              { value: "alarm",      label: "Alarm" },
+            ]}
+            onChange={(v) => setTweak("securityState", v)}/>
+        </TweakSection>
+        <TweakSection label="Home screen">
+          <TweakToggle label="Show AI Assistant card" value={tweaks.showAi} onChange={(v) => setTweak("showAi", v)}/>
+        </TweakSection>
+      </TweaksPanel>
+    );
+  }
+
+  function App() {
+    const [tweaks, setTweak] = useTweaks(TWEAK_DEFAULTS);
+    useEffect(() => { applyTheme(tweaks.brand, tweaks.platform); }, [tweaks.brand, tweaks.platform]);
+
+    return (
+      <div style={{
+        minHeight: "100vh",
+        display: "flex", flexDirection: "column", alignItems: "center",
+        padding: "48px 24px 80px",
+        background: "linear-gradient(180deg, var(--color-primary-lighter) 0%, var(--background-app) 38%, var(--background-app) 100%)",
+        transition: "background 400ms ease",
+        boxSizing: "border-box",
+      }}>
+        <header style={{
+          display: "flex", alignItems: "center", justifyContent: "space-between",
+          width: "100%", maxWidth: 1080, marginBottom: 32,
+        }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+            <div style={{
+              fontFamily: "var(--brand-font-primary)", fontSize: 22, fontWeight: 700,
+              letterSpacing: "-0.02em", color: "var(--text-neutral-bolder)",
+            }}>
+              SmartHome<span style={{ color: "var(--text-primary)" }}>+</span>
+            </div>
+            <div style={{
+              padding: "4px 10px",
+              borderRadius: "var(--radius-full)",
+              background: "var(--background-neutral-subtle)",
+              color: "var(--text-neutral)",
+              fontSize: 11, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase",
+              fontFamily: "var(--platform-font-default, var(--platform-font))",
+            }}>Home · {tweaks.brand === "telus" ? "TELUS" : "Homi"}</div>
+          </div>
+          <div style={{ fontSize: 12, color: "var(--text-neutral-subtle)", fontFamily: "var(--platform-font-default, var(--platform-font))" }}>
+            v1.0 · CDS
+          </div>
+        </header>
+
+        <Phone>
+          <HomeScreen tweaks={tweaks}/>
+        </Phone>
+
+        <div style={{
+          marginTop: 32, padding: "10px 16px",
+          borderRadius: "var(--radius-full)",
+          background: "var(--background-neutral-subtle)",
+          color: "var(--text-neutral)",
+          fontSize: 13, fontFamily: "var(--platform-font-default, var(--platform-font))",
+        }}>
+          Open Tweaks to switch hero state · Disarmed · Armed Away · Alarm
+        </div>
+
+        <Tweaks tweaks={tweaks} setTweak={setTweak}/>
+      </div>
+    );
+  }
+
+  ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+})();
+</script>
+</body>
+</html>

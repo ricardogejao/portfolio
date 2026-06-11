@@ -1,0 +1,25 @@
+/* ====================================================================
+   platform-android.css — Tier 1: Platform Primitives (Android)
+   ====================================================================
+   Overrides and extends global.css with Android-specific values.
+   Each platform file is maintained independently.
+
+   Contains:
+     - Platform font stack        Roboto / Noto Sans
+                                  (--platform-font-default, --platform-font-label)
+
+   Note: Platform-specific component tokens (toggle) live in components.css
+         and are activated by the [data-platform="android"] selector set by loader.js.
+
+   Depends on:  global.css
+   Selector:    :root[data-platform="android"] — activated by loader.js
+   ==================================================================== */
+
+/* Platform font stack */
+:root[data-platform="android"] {
+  --platform-font-default: Roboto, "Noto Sans", system-ui, sans-serif;
+  --platform-font-label:   "Roboto";
+
+  /* Platform overrides — add tokens here if Android requires
+     platform-specific values (e.g. letter spacing, font weights) */
+}

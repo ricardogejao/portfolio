@@ -1,0 +1,229 @@
+/* ---- Brand font: Merriweather (TTF bundled in /fonts/brand/homi) ---- */
+@font-face {
+  font-family: "Merriweather";
+  src: url("../../fonts/brand/homi/Merriweather-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Merriweather";
+  src: url("../../fonts/brand/homi/Merriweather-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Merriweather";
+  src: url("../../fonts/brand/homi/Merriweather-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Merriweather";
+  src: url("../../fonts/brand/homi/Merriweather-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ====================================================================
+   brand-homi.css — Tier 1–2: Brand Primitives + Theme Aliases (Homi)
+   ====================================================================
+   Defines everything that is unique to the Homi brand.
+   Swap this file (via loader.js) to switch to a different brand.
+
+   Contains:
+     - Brand font refs      Merriweather
+                            (--brand-font-primary, --brand-font-primary-label)
+     - Brand color palette  teal, blue, yellow ramps
+                            (--color-brand-teal-*, --color-brand-blue-*, --color-brand-yellow-*)
+     - Theme aliases        maps role + stop to a brand primitive
+                            (--color-primary-*, --color-secondary-*, --color-tertiary-*,
+                             --color-neutral-*, --color-info/success/alert/error-*)
+     - Brand-font typography display and heading xxlarge/xlarge only —
+                            the styles that use the brand font rather than the platform font.
+                            Sizes and spacing reference global.css primitives.
+                            (--typo-display-*, --typo-heading-xxlarge-*, --typo-heading-xlarge-*)
+
+   Depends on:  global.css (for --text-size-*, --line-height-*, --letter-space-*,
+                          --color-global-*)
+   Selector:    :root[data-brand="homi"] — activated by loader.js
+   ==================================================================== */
+
+:root[data-brand="homi"] {
+  /* brand font */
+  --brand-font-primary: Merriweather, Georgia, "Times New Roman", serif;
+  --brand-font-primary-label: "Merriweather"; /* Claude Design only — short font name for switcher UI display */
+  --brand-tagline: "A home that listens back"; /* Claude Design only */
+  --brand-label: "Homi"; /* Claude Design only */
+
+  /* brand-font weight aliases
+     Map semantic weight roles to the actual cuts available in this font.
+     Not every brand font has all weights — gaps are covered by mapping to the
+     nearest available weight. This ensures correct rendering without relying
+     on browser synthesis (faux bold/italic).
+     Merriweather: Light=300, Regular=400, Medium=none→SemiBold (600), Bold=700 */
+  --alias-font-weight-light:    300;
+  --alias-font-weight-regular:  400;
+  --alias-font-weight-medium:   600; /* no Medium weight — maps to SemiBold */
+  --alias-font-weight-semibold: 600;
+  --alias-font-weight-bold:     700;
+
+  /* brand color primitives */
+  --color-brand-teal-50: #EBFBF8;
+  --color-brand-teal-100: #D8F8F2;
+  --color-brand-teal-200: #B1F1E5;
+  --color-brand-teal-300: #8BEAD7;
+  --color-brand-teal-400: #64E3CA;
+  --color-brand-teal-500: #3DDCBD;
+  --color-brand-teal-600: #31B097;
+  --color-brand-teal-700: #258471;
+  --color-brand-teal-800: #18584C;
+  --color-brand-teal-900: #0C2C26;
+  --color-brand-blue-50: #E6F1FF;
+  --color-brand-blue-100: #CEE3FF;
+  --color-brand-blue-200: #9DC6FF;
+  --color-brand-blue-300: #6BAAFF;
+  --color-brand-blue-400: #3A8DFF;
+  --color-brand-blue-500: #0971FF;
+  --color-brand-blue-600: #075ACC;
+  --color-brand-blue-700: #054499;
+  --color-brand-blue-800: #042D66;
+  --color-brand-blue-900: #021733;
+  --color-brand-yellow-50: #FFFDEB;
+  --color-brand-yellow-100: #FFFBD8;
+  --color-brand-yellow-200: #FFF9C4;
+  --color-brand-yellow-300: #FFF59D;
+  --color-brand-yellow-400: #FFF389;
+  --color-brand-yellow-500: #FFEB3B;
+  --color-brand-yellow-600: #E5D335;
+  --color-brand-yellow-700: #CCBC2F;
+  --color-brand-yellow-800: #B2A429;
+  --color-brand-yellow-900: #998D23;
+
+  /* theme aliases (role + stop → primitive) */
+  --color-primary-lighter: var(--color-brand-teal-300);
+  --color-primary-light: var(--color-brand-teal-500);
+  --color-primary-pure: var(--color-brand-teal-700);
+  --color-primary-dark: var(--color-brand-teal-800);
+  --color-primary-darker: var(--color-brand-teal-900);
+  --color-secondary-lighter: var(--color-brand-blue-100);
+  --color-secondary-light: var(--color-brand-blue-200);
+  --color-secondary-pure: var(--color-brand-blue-600);
+  --color-secondary-dark: var(--color-brand-blue-800);
+  --color-secondary-darker: var(--color-brand-blue-900);
+  --color-tertiary-lighter: var(--color-brand-yellow-100);
+  --color-tertiary-light: var(--color-brand-yellow-300);
+  --color-tertiary-pure: var(--color-brand-yellow-500);
+  --color-tertiary-dark: var(--color-brand-yellow-700);
+  --color-tertiary-darker: var(--color-brand-yellow-900);
+  --color-neutral-lightest: var(--color-global-grey-50);
+  --color-neutral-lighter: var(--color-global-grey-100);
+  --color-neutral-light: var(--color-global-grey-200);
+  --color-neutral-pure: var(--color-global-grey-500);
+  --color-neutral-dark: var(--color-global-grey-700);
+  --color-neutral-darker: var(--color-global-grey-800);
+  --color-neutral-darkest: var(--color-global-grey-900);
+  --color-info-lighter: var(--color-global-blue-50);
+  --color-info-light: var(--color-global-blue-200);
+  --color-info-pure: var(--color-global-blue-500);
+  --color-info-dark: var(--color-global-blue-700);
+  --color-info-darker: var(--color-global-blue-800);
+  --color-success-lighter: var(--color-global-green-50);
+  --color-success-light: var(--color-global-green-200);
+  --color-success-pure: var(--color-global-green-500);
+  --color-success-dark: var(--color-global-green-700);
+  --color-success-darker: var(--color-global-green-800);
+  --color-alert-lighter: var(--color-global-amber-50);
+  --color-alert-light: var(--color-global-amber-200);
+  --color-alert-pure: var(--color-global-amber-500);
+  --color-alert-dark: var(--color-global-amber-700);
+  --color-alert-darker: var(--color-global-amber-800);
+  --color-error-lighter: var(--color-global-red-50);
+  --color-error-light: var(--color-global-red-200);
+  --color-error-pure: var(--color-global-red-500);
+  --color-error-dark: var(--color-global-red-700);
+  --color-error-darker: var(--color-global-red-800);
+
+  /* brand-font typography — display and heading xxlarge/xlarge
+     Merriweather bold=700, regular=600 (semibold), light=400 (regular weight).
+     Platform-invariant — the brand font is the same on all platforms. */
+
+  /* display xlarge */
+  --typo-display-xlarge-family: var(--brand-font-primary);
+  --typo-display-xlarge-size: var(--text-size-13);
+  --typo-display-xlarge-line-height: var(--line-height-13);
+  --typo-display-xlarge-letter-spacing: var(--letter-space-dense);
+  --typo-display-xlarge-weight: var(--alias-font-weight-regular);
+  --typo-display-xlarge: var(--typo-display-xlarge-weight) var(--typo-display-xlarge-size)/var(--typo-display-xlarge-line-height) var(--typo-display-xlarge-family);
+
+  /* display large */
+  --typo-display-large-family: var(--brand-font-primary);
+  --typo-display-large-size: var(--text-size-12);
+  --typo-display-large-line-height: var(--line-height-12);
+  --typo-display-large-letter-spacing: var(--letter-space-tight);
+  --typo-display-large-weight: var(--alias-font-weight-regular);
+  --typo-display-large: var(--typo-display-large-weight) var(--typo-display-large-size)/var(--typo-display-large-line-height) var(--typo-display-large-family);
+
+  /* display medium */
+  --typo-display-medium-family: var(--brand-font-primary);
+  --typo-display-medium-size: var(--text-size-11);
+  --typo-display-medium-line-height: var(--line-height-11);
+  --typo-display-medium-letter-spacing: var(--letter-space-tight);
+  --typo-display-medium-weight: var(--alias-font-weight-regular);
+  --typo-display-medium: var(--typo-display-medium-weight) var(--typo-display-medium-size)/var(--typo-display-medium-line-height) var(--typo-display-medium-family);
+
+  /* display small */
+  --typo-display-small-family: var(--brand-font-primary);
+  --typo-display-small-size: var(--text-size-9);
+  --typo-display-small-line-height: var(--line-height-9);
+  --typo-display-small-letter-spacing: var(--letter-space-tight);
+  --typo-display-small-weight: var(--alias-font-weight-regular);
+  --typo-display-small: var(--typo-display-small-weight) var(--typo-display-small-size)/var(--typo-display-small-line-height) var(--typo-display-small-family);
+
+  /* heading xxlarge */
+  --typo-heading-xxlarge-bold-family: var(--brand-font-primary);
+  --typo-heading-xxlarge-bold-size: var(--text-size-10);
+  --typo-heading-xxlarge-bold-line-height: var(--line-height-10);
+  --typo-heading-xxlarge-bold-letter-spacing: var(--letter-space-tight);
+  --typo-heading-xxlarge-bold-weight: var(--alias-font-weight-bold);
+  --typo-heading-xxlarge-bold: var(--typo-heading-xxlarge-bold-weight) var(--typo-heading-xxlarge-bold-size)/var(--typo-heading-xxlarge-bold-line-height) var(--typo-heading-xxlarge-bold-family);
+
+  --typo-heading-xxlarge-regular-family: var(--brand-font-primary);
+  --typo-heading-xxlarge-regular-size: var(--text-size-10);
+  --typo-heading-xxlarge-regular-line-height: var(--line-height-10);
+  --typo-heading-xxlarge-regular-letter-spacing: var(--letter-space-tight);
+  --typo-heading-xxlarge-regular-weight: var(--alias-font-weight-medium);
+  --typo-heading-xxlarge-regular: var(--typo-heading-xxlarge-regular-weight) var(--typo-heading-xxlarge-regular-size)/var(--typo-heading-xxlarge-regular-line-height) var(--typo-heading-xxlarge-regular-family);
+
+  --typo-heading-xxlarge-light-family: var(--brand-font-primary);
+  --typo-heading-xxlarge-light-size: var(--text-size-10);
+  --typo-heading-xxlarge-light-line-height: var(--line-height-10);
+  --typo-heading-xxlarge-light-letter-spacing: var(--letter-space-tight);
+  --typo-heading-xxlarge-light-weight: var(--alias-font-weight-light);
+  --typo-heading-xxlarge-light: var(--typo-heading-xxlarge-light-weight) var(--typo-heading-xxlarge-light-size)/var(--typo-heading-xxlarge-light-line-height) var(--typo-heading-xxlarge-light-family);
+
+  /* heading xlarge */
+  --typo-heading-xlarge-bold-family: var(--brand-font-primary);
+  --typo-heading-xlarge-bold-size: var(--text-size-9);
+  --typo-heading-xlarge-bold-line-height: var(--line-height-9);
+  --typo-heading-xlarge-bold-letter-spacing: var(--letter-space-tight);
+  --typo-heading-xlarge-bold-weight: var(--alias-font-weight-bold);
+  --typo-heading-xlarge-bold: var(--typo-heading-xlarge-bold-weight) var(--typo-heading-xlarge-bold-size)/var(--typo-heading-xlarge-bold-line-height) var(--typo-heading-xlarge-bold-family);
+
+  --typo-heading-xlarge-regular-family: var(--brand-font-primary);
+  --typo-heading-xlarge-regular-size: var(--text-size-9);
+  --typo-heading-xlarge-regular-line-height: var(--line-height-9);
+  --typo-heading-xlarge-regular-letter-spacing: var(--letter-space-tight);
+  --typo-heading-xlarge-regular-weight: var(--alias-font-weight-medium);
+  --typo-heading-xlarge-regular: var(--typo-heading-xlarge-regular-weight) var(--typo-heading-xlarge-regular-size)/var(--typo-heading-xlarge-regular-line-height) var(--typo-heading-xlarge-regular-family);
+
+  --typo-heading-xlarge-light-family: var(--brand-font-primary);
+  --typo-heading-xlarge-light-size: var(--text-size-9);
+  --typo-heading-xlarge-light-line-height: var(--line-height-9);
+  --typo-heading-xlarge-light-letter-spacing: var(--letter-space-tight);
+  --typo-heading-xlarge-light-weight: var(--alias-font-weight-light);
+  --typo-heading-xlarge-light: var(--typo-heading-xlarge-light-weight) var(--typo-heading-xlarge-light-size)/var(--typo-heading-xlarge-light-line-height) var(--typo-heading-xlarge-light-family);
+}

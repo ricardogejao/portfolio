@@ -1,0 +1,25 @@
+/* ====================================================================
+   platform-ios.css — Tier 1: Platform Primitives (iOS)
+   ====================================================================
+   Overrides and extends global.css with iOS-specific values.
+   Each platform file is maintained independently.
+
+   Contains:
+     - Platform font stack        SF Pro / -apple-system
+                                  (--platform-font-default, --platform-font-label)
+
+   Note: Platform-specific component tokens (toggle) live in components.css
+         and are activated by the [data-platform="ios"] selector set by loader.js.
+
+   Depends on:  global.css
+   Selector:    :root[data-platform="ios"] — activated by loader.js
+   ==================================================================== */
+
+/* Platform font stack */
+:root[data-platform="ios"] {
+  --platform-font-default: -apple-system, "SF Pro Text", "SF Pro", system-ui, sans-serif;
+  --platform-font-label:   "SF Pro";
+
+  /* Platform overrides — add tokens here if iOS requires
+     platform-specific values (e.g. letter spacing, font weights) */
+}

@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en" data-brand="telus" data-platform="ios">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SmartHome+ · Interactive Moments</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+<link id="cds-token-brand" rel="stylesheet" href="src/tokens/brand-telus.css">
+<link id="cds-token-platform" rel="stylesheet" href="src/tokens/platform-ios.css">
+<script>window.CDS_TOKEN_REPO = null;</script>
+<script src="src/tokens/loader.js"></script>
+<link rel="stylesheet" href="src/styles.css">
+
+<style>
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: #ffffff;
+    min-height: 100vh;
+    color: var(--text-neutral-bolder);
+    font-family: var(--platform-font-default, var(--platform-font));
+    overflow: hidden;
+  }
+  .stage {
+    position: fixed; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: #ffffff;
+  }
+  .frame {
+    position: relative;
+    width: 1440px; height: 900px;
+    background: var(--background-app, #fff);
+    border-radius: 18px;
+    box-shadow: 0 30px 80px rgba(20, 10, 30, 0.10), 0 0 0 1px rgba(0,0,0,0.04);
+    overflow: hidden;
+  }
+</style>
+</head>
+<body>
+
+<template id="__bundler_thumbnail">
+  <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <rect width="100" height="100" rx="20" fill="#4B286D"/>
+    <rect x="34" y="22" width="32" height="56" rx="7" fill="#fff"/>
+    <circle cx="50" cy="50" r="9" fill="#E53293"/>
+  </svg>
+</template>
+
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<!-- CDS infrastructure -->
+<script src="src/tokens.js"></script>
+<script src="src/icon-data.js"></script>
+<script src="src/icons.js"></script>
+<script src="src/icon-meta.js"></script>
+<script type="text/babel" src="src/icon-renderer.jsx"></script>
+
+<!-- CDS components -->
+<script type="text/babel" src="src/listening-wave.jsx"></script>
+<script type="text/babel" src="src/feedback-caption.jsx"></script>
+<script type="text/babel" src="src/text-input-field.jsx"></script>
+<script type="text/babel" src="src/checkbox.jsx"></script>
+<script type="text/babel" src="src/banner.jsx"></script>
+<script type="text/babel" src="src/button.jsx"></script>
+<script type="text/babel" src="src/toggle-button.jsx"></script>
+<script type="text/babel" src="src/device-tile.jsx"></script>
+<script type="text/babel" src="src/pill.jsx"></script>
+<script type="text/babel" src="src/tag.jsx"></script>
+<script type="text/babel" src="src/snackbar.jsx"></script>
+<script type="text/babel" src="src/ai-assistant.jsx"></script>
+<script type="text/babel" src="src/app-nav.jsx"></script>
+
+<!-- iOS frame (status bar only) -->
+<script type="text/babel" src="frames/ios-frame.jsx"></script>
+
+<!-- App -->
+<script type="text/babel" src="src/home-screen.jsx"></script>
+<script type="text/babel" src="src/genui-cases.jsx"></script>
+
+<script type="text/babel">
+(function () {
+  const { useState, useLayoutEffect } = React;
+  const { InteractiveMoments } = window;
+
+  function Stage() {
+    const [scale, setScale] = useState(1);
+    useLayoutEffect(() => {
+      function fit() {
+        const w = window.innerWidth, h = window.innerHeight;
+        const s = Math.min(w / 1440, h / 900) * 0.99;
+        setScale(s);
+      }
+      fit();
+      window.addEventListener("resize", fit);
+      return () => window.removeEventListener("resize", fit);
+    }, []);
+    return (
+      <div className="stage">
+        <div style={{ transform: `scale(${scale})`, transformOrigin: "center center" }}>
+          <div className="frame">
+            <InteractiveMoments/>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  ReactDOM.createRoot(document.getElementById("root")).render(<Stage/>);
+})();
+</script>
+</body>
+</html>

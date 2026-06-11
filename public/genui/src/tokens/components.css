@@ -1,0 +1,124 @@
+/* ====================================================================
+   components.css — Tier 4: Component Tokens
+   ====================================================================
+   All component tokens — both platform-agnostic globals and
+   platform-specific variants — live here. Activation is handled
+   entirely by CSS selectors and the data-platform / data-brand
+   attributes set by loader.js; no file-swapping is needed.
+
+   Contains:
+     - Checkbox / radio     disabled-selected state backgrounds      (global)
+     - Slider               disabled track background                (global)
+     - Toggle               knob, track, border, geometry tokens     (per-platform)
+     - Toggle focus         focus ring color and width               (global)
+
+   Depends on:  global.css (for --radius-*, --border-width-*),
+                semantic.css (for --background-* references),
+                brand-*.css (for --color-* references)
+   Selectors:   :root — global tokens, always active
+                :root[data-platform="X"], [data-platform-scope="X"] — platform tokens
+   ==================================================================== */
+
+/* ==================== CHECKBOX / RADIO COMPONENT TOKENS ==================== */
+:root {
+  --checkbox-background-disabled-selected: var(--color-primary-light);
+  --radio-background-disabled-selected: var(--color-primary-light);
+}
+/* ==================== END CHECKBOX / RADIO COMPONENT TOKENS ==================== */
+
+/* ==================== SLIDER COMPONENT TOKENS ==================== */
+:root {
+  --slider-background-disabled: var(--color-primary-light);
+}
+/* ==================== END SLIDER COMPONENT TOKENS ==================== */
+
+/* ==================== TOGGLE COMPONENT TOKENS ==================== */
+
+/* Toggle focus ring — global, not platform-specific */
+:root {
+  --toggle-focus-color: var(--border-info, var(--color-info-pure));
+  --toggle-focus-width: var(--border-width-heavy);
+}
+
+/* iOS toggle — rounded-rect track with subtle halo outside */
+:root[data-platform="ios"],
+[data-platform-scope="ios"] {
+  --toggle-knob-bg-enabled-on:   var(--color-global-grey-50);
+  --toggle-knob-bg-enabled-off:  var(--color-global-grey-50);
+  --toggle-knob-bg-disabled-on:  var(--color-global-grey-50);
+  --toggle-knob-bg-disabled-off: var(--color-global-grey-50);
+
+  --toggle-track-bg-enabled-on:   var(--background-primary-bold);
+  --toggle-track-bg-enabled-off:  var(--color-neutral-dark);
+  --toggle-track-bg-disabled-on:  var(--background-disabled-bold);
+  --toggle-track-bg-disabled-off: var(--background-disabled-bold);
+
+  --toggle-track-border-enabled-on:   var(--background-primary-subtle);
+  --toggle-track-border-enabled-off:  var(--background-neutral-subtle);
+  --toggle-track-border-disabled-on:  var(--background-disabled-bold);
+  --toggle-track-border-disabled-off: var(--background-disabled-bold);
+
+  --toggle-track-width: var(--size-9);   /* 56px */
+  --toggle-track-height: var(--size-7);  /* 32px */
+  --toggle-track-radius: var(--radius-full);
+  --toggle-knob-size-on:  27px;
+  --toggle-knob-size-off: 27px;
+  --toggle-track-border-width: var(--border-width-thick);
+  --toggle-track-padding: var(--space-xxsmall);
+}
+
+/* Android toggle — outlined switch with smaller off-state knob */
+:root[data-platform="android"],
+[data-platform-scope="android"] {
+  --toggle-knob-bg-enabled-on:   var(--color-global-grey-50);
+  --toggle-knob-bg-enabled-off:  var(--color-neutral-dark);
+  --toggle-knob-bg-disabled-on:  var(--color-global-grey-50);
+  --toggle-knob-bg-disabled-off: var(--background-disabled-bold);
+
+  --toggle-track-bg-enabled-on:   var(--background-primary-bold);
+  --toggle-track-bg-enabled-off:  var(--background-neutral-subtle);
+  --toggle-track-bg-disabled-on:  var(--background-disabled-bold);
+  --toggle-track-bg-disabled-off: var(--background-neutral-subtle);
+
+  --toggle-track-border-enabled-on:   var(--background-primary-bold);
+  --toggle-track-border-enabled-off:  var(--color-neutral-dark);
+  --toggle-track-border-disabled-on:  var(--background-disabled-bold);
+  --toggle-track-border-disabled-off: var(--background-disabled-bold);
+
+  --toggle-track-width: var(--size-9);   /* 56px */
+  --toggle-track-height: var(--size-7);  /* 32px */
+  --toggle-track-radius: var(--radius-full);
+  --toggle-knob-size-on:  var(--size-6);  /* 24px */
+  --toggle-knob-size-off: var(--size-5);  /* 16px */
+  --toggle-track-border-width: var(--border-width-thick);
+  --toggle-track-padding: var(--space-xsmall);
+}
+
+/* Web toggle — mirrors iOS rounded style by default */
+:root[data-platform="web"],
+[data-platform-scope="web"] {
+  --toggle-knob-bg-enabled-on:   var(--color-global-grey-50);
+  --toggle-knob-bg-enabled-off:  var(--color-global-grey-50);
+  --toggle-knob-bg-disabled-on:  var(--color-global-grey-50);
+  --toggle-knob-bg-disabled-off: var(--color-global-grey-50);
+
+  --toggle-track-bg-enabled-on:   var(--background-primary-bold);
+  --toggle-track-bg-enabled-off:  var(--color-neutral-dark);
+  --toggle-track-bg-disabled-on:  var(--background-disabled-bold);
+  --toggle-track-bg-disabled-off: var(--background-disabled-bold);
+
+  --toggle-track-border-enabled-on:   var(--background-primary-subtle);
+  --toggle-track-border-enabled-off:  var(--background-neutral-subtle);
+  --toggle-track-border-disabled-on:  var(--background-disabled-bold);
+  --toggle-track-border-disabled-off: var(--background-disabled-bold);
+
+  --toggle-track-width: var(--size-9);   /* 56px */
+  --toggle-track-height: var(--size-7);  /* 32px */
+  --toggle-track-radius: var(--radius-full);
+  --toggle-knob-size-on:  27px;
+  --toggle-knob-size-off: 27px;
+  --toggle-track-border-width: var(--border-width-thick);
+  --toggle-track-padding: var(--space-xxsmall);
+}
+
+/* ==================== END TOGGLE COMPONENT TOKENS ==================== */

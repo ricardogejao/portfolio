@@ -14,12 +14,12 @@ export function Nav({ variant = "dark" }: NavProps) {
   const text = variant === "dark" ? "text-white" : "text-[#111111]";
   const muted = variant === "dark" ? "text-white/70" : "text-[#111111]/70";
   return (
-    <nav className={`flex items-center justify-between px-6 md:px-12 py-6 ${text}`}>
+    <nav className={`flex items-center justify-between px-6 md:px-12 py-8 mt-4 ${text}`}>
       <button onClick={() => go("home")} aria-label="Home" className="inline-flex items-center">
         <img
           src={logoGejao}
           alt="gejão"
-          className={`h-7 w-auto object-contain ${variant === "dark" ? "" : "invert"}`}
+          className={`h-10 w-auto object-contain ${variant === "dark" ? "" : "invert"}`}
         />
       </button>
       <div className={`flex items-center gap-6 uppercase tracking-[0.18em] ${muted}`} style={{ fontSize: "11px" }}>

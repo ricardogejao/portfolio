@@ -1,0 +1,237 @@
+/* ====================================================================
+   typography.css — Tier 3: Semantic Typography Tokens (platform-font)
+   ====================================================================
+   Defines all typography that uses the platform font rather than a
+   brand font. Font family resolves via --platform-font-default, so a
+   single file covers all platforms without duplication.
+
+   Contains:
+     - Heading large        bold / regular / light  (22px)
+     - Heading medium       bold / regular / light  (20px)
+     - Heading small        bold                    (17px)
+     - Body large           regular / bold          (15px)
+     - Body medium          regular / bold          (13px)
+     - Body small           regular / bold          (12px)
+     - Interface label      large / small
+     - Interface caption    regular / bold
+     - Interface footnote   regular
+     - Component button     large / small
+     - Component card heading  large / large-bold / small
+     - Component pill
+     - Component tag        large / small
+
+   Each token has -family, -size, -line-height, -letter-spacing, -weight
+   sub-tokens plus a composite shorthand.
+
+   Depends on:  global.css (for --platform-font-default, --text-size-*,
+                          --line-height-*, --letter-space-*)
+   Selector:    :root — always active once loaded
+   ==================================================================== */
+
+:root {
+  /* Heading weight-name convention
+     ────────────────────────────────────────────────────────────
+     For headings, the suffix names a *visual style*, not a raw weight:
+       -bold     = bold cut    (700)
+       -regular  = medium cut  (500) — visually heavier than body regular
+       -light    = regular cut (400) — visually lighter than -regular
+     This intentionally diverges from body weights (where -regular is 400
+     and -bold is 600) so heading hierarchy reads correctly. The brand-font
+     heading-xxlarge/xlarge tokens in brand-*.css follow the same convention.
+     ──────────────────────────────────────────────────────────── */
+
+  /* heading large */
+  --typo-heading-large-bold-family: var(--platform-font-default);
+  --typo-heading-large-bold-size: var(--text-size-8);
+  --typo-heading-large-bold-line-height: var(--line-height-8);
+  --typo-heading-large-bold-letter-spacing: var(--letter-space-tight);
+  --typo-heading-large-bold-weight: var(--platform-font-weight-bold);
+  --typo-heading-large-bold: var(--typo-heading-large-bold-weight) var(--typo-heading-large-bold-size)/var(--typo-heading-large-bold-line-height) var(--typo-heading-large-bold-family);
+
+  --typo-heading-large-regular-family: var(--platform-font-default);
+  --typo-heading-large-regular-size: var(--text-size-8);
+  --typo-heading-large-regular-line-height: var(--line-height-8);
+  --typo-heading-large-regular-letter-spacing: var(--letter-space-tight);
+  --typo-heading-large-regular-weight: var(--platform-font-weight-medium);
+  --typo-heading-large-regular: var(--typo-heading-large-regular-weight) var(--typo-heading-large-regular-size)/var(--typo-heading-large-regular-line-height) var(--typo-heading-large-regular-family);
+
+  --typo-heading-large-light-family: var(--platform-font-default);
+  --typo-heading-large-light-size: var(--text-size-8);
+  --typo-heading-large-light-line-height: var(--line-height-8);
+  --typo-heading-large-light-letter-spacing: var(--letter-space-tight);
+  --typo-heading-large-light-weight: var(--platform-font-weight-regular);
+  --typo-heading-large-light: var(--typo-heading-large-light-weight) var(--typo-heading-large-light-size)/var(--typo-heading-large-light-line-height) var(--typo-heading-large-light-family);
+
+  /* heading medium */
+  --typo-heading-medium-bold-family: var(--platform-font-default);
+  --typo-heading-medium-bold-size: var(--text-size-7);
+  --typo-heading-medium-bold-line-height: var(--line-height-7);
+  --typo-heading-medium-bold-letter-spacing: var(--letter-space-tight);
+  --typo-heading-medium-bold-weight: var(--platform-font-weight-bold);
+  --typo-heading-medium-bold: var(--typo-heading-medium-bold-weight) var(--typo-heading-medium-bold-size)/var(--typo-heading-medium-bold-line-height) var(--typo-heading-medium-bold-family);
+
+  --typo-heading-medium-regular-family: var(--platform-font-default);
+  --typo-heading-medium-regular-size: var(--text-size-7);
+  --typo-heading-medium-regular-line-height: var(--line-height-7);
+  --typo-heading-medium-regular-letter-spacing: var(--letter-space-tight);
+  --typo-heading-medium-regular-weight: var(--platform-font-weight-medium);
+  --typo-heading-medium-regular: var(--typo-heading-medium-regular-weight) var(--typo-heading-medium-regular-size)/var(--typo-heading-medium-regular-line-height) var(--typo-heading-medium-regular-family);
+
+  --typo-heading-medium-light-family: var(--platform-font-default);
+  --typo-heading-medium-light-size: var(--text-size-7);
+  --typo-heading-medium-light-line-height: var(--line-height-7);
+  --typo-heading-medium-light-letter-spacing: var(--letter-space-tight);
+  --typo-heading-medium-light-weight: var(--platform-font-weight-regular);
+  --typo-heading-medium-light: var(--typo-heading-medium-light-weight) var(--typo-heading-medium-light-size)/var(--typo-heading-medium-light-line-height) var(--typo-heading-medium-light-family);
+
+  /* heading small */
+  --typo-heading-small-bold-family: var(--platform-font-default);
+  --typo-heading-small-bold-size: var(--text-size-6);
+  --typo-heading-small-bold-line-height: var(--line-height-6);
+  --typo-heading-small-bold-letter-spacing: var(--letter-space-tight);
+  --typo-heading-small-bold-weight: var(--platform-font-weight-semibold);
+  --typo-heading-small-bold: var(--typo-heading-small-bold-weight) var(--typo-heading-small-bold-size)/var(--typo-heading-small-bold-line-height) var(--typo-heading-small-bold-family);
+
+  /* body large */
+  --typo-body-large-regular-family: var(--platform-font-default);
+  --typo-body-large-regular-size: var(--text-size-5);
+  --typo-body-large-regular-line-height: var(--line-height-4);
+  --typo-body-large-regular-letter-spacing: var(--letter-space-tight);
+  --typo-body-large-regular-weight: var(--platform-font-weight-regular);
+  --typo-body-large-regular: var(--typo-body-large-regular-weight) var(--typo-body-large-regular-size)/var(--typo-body-large-regular-line-height) var(--typo-body-large-regular-family);
+
+  --typo-body-large-bold-family: var(--platform-font-default);
+  --typo-body-large-bold-size: var(--text-size-5);
+  --typo-body-large-bold-line-height: var(--line-height-4);
+  --typo-body-large-bold-letter-spacing: var(--letter-space-tight);
+  --typo-body-large-bold-weight: var(--platform-font-weight-semibold);
+  --typo-body-large-bold: var(--typo-body-large-bold-weight) var(--typo-body-large-bold-size)/var(--typo-body-large-bold-line-height) var(--typo-body-large-bold-family);
+
+  /* body medium */
+  --typo-body-medium-regular-family: var(--platform-font-default);
+  --typo-body-medium-regular-size: var(--text-size-3);
+  --typo-body-medium-regular-line-height: var(--line-height-3);
+  --typo-body-medium-regular-letter-spacing: var(--letter-space-tight);
+  --typo-body-medium-regular-weight: var(--platform-font-weight-regular);
+  --typo-body-medium-regular: var(--typo-body-medium-regular-weight) var(--typo-body-medium-regular-size)/var(--typo-body-medium-regular-line-height) var(--typo-body-medium-regular-family);
+
+  --typo-body-medium-bold-family: var(--platform-font-default);
+  --typo-body-medium-bold-size: var(--text-size-3);
+  --typo-body-medium-bold-line-height: var(--line-height-3);
+  --typo-body-medium-bold-letter-spacing: var(--letter-space-tight);
+  --typo-body-medium-bold-weight: var(--platform-font-weight-semibold);
+  --typo-body-medium-bold: var(--typo-body-medium-bold-weight) var(--typo-body-medium-bold-size)/var(--typo-body-medium-bold-line-height) var(--typo-body-medium-bold-family);
+
+  /* body small */
+  --typo-body-small-regular-family: var(--platform-font-default);
+  --typo-body-small-regular-size: var(--text-size-2);
+  --typo-body-small-regular-line-height: var(--line-height-2);
+  --typo-body-small-regular-letter-spacing: var(--letter-space-default);
+  --typo-body-small-regular-weight: var(--platform-font-weight-regular);
+  --typo-body-small-regular: var(--typo-body-small-regular-weight) var(--typo-body-small-regular-size)/var(--typo-body-small-regular-line-height) var(--typo-body-small-regular-family);
+
+  --typo-body-small-bold-family: var(--platform-font-default);
+  --typo-body-small-bold-size: var(--text-size-2);
+  --typo-body-small-bold-line-height: var(--line-height-2);
+  --typo-body-small-bold-letter-spacing: var(--letter-space-default);
+  --typo-body-small-bold-weight: var(--platform-font-weight-semibold);
+  --typo-body-small-bold: var(--typo-body-small-bold-weight) var(--typo-body-small-bold-size)/var(--typo-body-small-bold-line-height) var(--typo-body-small-bold-family);
+
+  /* interface label */
+  --typo-interface-label-large-family: var(--platform-font-default);
+  --typo-interface-label-large-size: var(--text-size-4);
+  --typo-interface-label-large-line-height: var(--line-height-2);
+  --typo-interface-label-large-letter-spacing: var(--letter-space-default);
+  --typo-interface-label-large-weight: var(--platform-font-weight-medium);
+  --typo-interface-label-large: var(--typo-interface-label-large-weight) var(--typo-interface-label-large-size)/var(--typo-interface-label-large-line-height) var(--typo-interface-label-large-family);
+
+  --typo-interface-label-small-family: var(--platform-font-default);
+  --typo-interface-label-small-size: var(--text-size-1);
+  --typo-interface-label-small-line-height: var(--line-height-1);
+  --typo-interface-label-small-letter-spacing: var(--letter-space-default);
+  --typo-interface-label-small-weight: var(--platform-font-weight-semibold);
+  --typo-interface-label-small: var(--typo-interface-label-small-weight) var(--typo-interface-label-small-size)/var(--typo-interface-label-small-line-height) var(--typo-interface-label-small-family);
+
+  /* interface caption */
+  --typo-interface-caption-regular-family: var(--platform-font-default);
+  --typo-interface-caption-regular-size: var(--text-size-5);
+  --typo-interface-caption-regular-line-height: var(--line-height-5);
+  --typo-interface-caption-regular-letter-spacing: var(--letter-space-default);
+  --typo-interface-caption-regular-weight: var(--platform-font-weight-regular);
+  --typo-interface-caption-regular: var(--typo-interface-caption-regular-weight) var(--typo-interface-caption-regular-size)/var(--typo-interface-caption-regular-line-height) var(--typo-interface-caption-regular-family);
+
+  --typo-interface-caption-bold-family: var(--platform-font-default);
+  --typo-interface-caption-bold-size: var(--text-size-5);
+  --typo-interface-caption-bold-line-height: var(--line-height-5);
+  --typo-interface-caption-bold-letter-spacing: var(--letter-space-default);
+  --typo-interface-caption-bold-weight: var(--platform-font-weight-semibold);
+  --typo-interface-caption-bold: var(--typo-interface-caption-bold-weight) var(--typo-interface-caption-bold-size)/var(--typo-interface-caption-bold-line-height) var(--typo-interface-caption-bold-family);
+
+  /* interface footnote */
+  --typo-interface-footnote-regular-family: var(--platform-font-default);
+  --typo-interface-footnote-regular-size: var(--text-size-3);
+  --typo-interface-footnote-regular-line-height: var(--line-height-3);
+  --typo-interface-footnote-regular-letter-spacing: var(--letter-space-default);
+  --typo-interface-footnote-regular-weight: var(--platform-font-weight-regular);
+  --typo-interface-footnote-regular: var(--typo-interface-footnote-regular-weight) var(--typo-interface-footnote-regular-size)/var(--typo-interface-footnote-regular-line-height) var(--typo-interface-footnote-regular-family);
+
+  /* component button */
+  --typo-component-button-large-family: var(--platform-font-default);
+  --typo-component-button-large-size: var(--text-size-5);
+  --typo-component-button-large-line-height: var(--line-height-4);
+  --typo-component-button-large-letter-spacing: var(--letter-space-dense);
+  --typo-component-button-large-weight: var(--platform-font-weight-medium);
+  --typo-component-button-large: var(--typo-component-button-large-weight) var(--typo-component-button-large-size)/var(--typo-component-button-large-line-height) var(--typo-component-button-large-family);
+
+  --typo-component-button-small-family: var(--platform-font-default);
+  --typo-component-button-small-size: var(--text-size-4);
+  --typo-component-button-small-line-height: var(--line-height-4);
+  --typo-component-button-small-letter-spacing: var(--letter-space-dense);
+  --typo-component-button-small-weight: var(--platform-font-weight-semibold);
+  --typo-component-button-small: var(--typo-component-button-small-weight) var(--typo-component-button-small-size)/var(--typo-component-button-small-line-height) var(--typo-component-button-small-family);
+
+  /* component card heading */
+  --typo-component-card-heading-large-family: var(--platform-font-default);
+  --typo-component-card-heading-large-size: var(--text-size-5);
+  --typo-component-card-heading-large-line-height: var(--line-height-4);
+  --typo-component-card-heading-large-letter-spacing: var(--letter-space-tight);
+  --typo-component-card-heading-large-weight: var(--platform-font-weight-medium);
+  --typo-component-card-heading-large: var(--typo-component-card-heading-large-weight) var(--typo-component-card-heading-large-size)/var(--typo-component-card-heading-large-line-height) var(--typo-component-card-heading-large-family);
+
+  --typo-component-card-heading-large-bold-family: var(--platform-font-default);
+  --typo-component-card-heading-large-bold-size: var(--text-size-5);
+  --typo-component-card-heading-large-bold-line-height: var(--line-height-4);
+  --typo-component-card-heading-large-bold-letter-spacing: var(--letter-space-tight);
+  --typo-component-card-heading-large-bold-weight: var(--platform-font-weight-semibold);
+  --typo-component-card-heading-large-bold: var(--typo-component-card-heading-large-bold-weight) var(--typo-component-card-heading-large-bold-size)/var(--typo-component-card-heading-large-bold-line-height) var(--typo-component-card-heading-large-bold-family);
+
+  --typo-component-card-heading-small-family: var(--platform-font-default);
+  --typo-component-card-heading-small-size: var(--text-size-4);
+  --typo-component-card-heading-small-line-height: var(--line-height-3);
+  --typo-component-card-heading-small-letter-spacing: var(--letter-space-tight);
+  --typo-component-card-heading-small-weight: var(--platform-font-weight-semibold);
+  --typo-component-card-heading-small: var(--typo-component-card-heading-small-weight) var(--typo-component-card-heading-small-size)/var(--typo-component-card-heading-small-line-height) var(--typo-component-card-heading-small-family);
+
+  /* component pill */
+  --typo-component-pill-family: var(--platform-font-default);
+  --typo-component-pill-size: var(--text-size-4);
+  --typo-component-pill-line-height: var(--line-height-4);
+  --typo-component-pill-letter-spacing: var(--letter-space-default);
+  --typo-component-pill-weight: var(--platform-font-weight-medium);
+  --typo-component-pill: var(--typo-component-pill-weight) var(--typo-component-pill-size)/var(--typo-component-pill-line-height) var(--typo-component-pill-family);
+
+  /* component tag */
+  --typo-component-tag-large-family: var(--platform-font-default);
+  --typo-component-tag-large-size: var(--text-size-4);
+  --typo-component-tag-large-line-height: var(--line-height-2);
+  --typo-component-tag-large-letter-spacing: var(--letter-space-default);
+  --typo-component-tag-large-weight: var(--platform-font-weight-bold);
+  --typo-component-tag-large: var(--typo-component-tag-large-weight) var(--typo-component-tag-large-size)/var(--typo-component-tag-large-line-height) var(--typo-component-tag-large-family);
+
+  --typo-component-tag-small-family: var(--platform-font-default);
+  --typo-component-tag-small-size: var(--text-size-1);
+  --typo-component-tag-small-line-height: var(--line-height-1);
+  --typo-component-tag-small-letter-spacing: var(--letter-space-default);
+  --typo-component-tag-small-weight: var(--platform-font-weight-semibold);
+  --typo-component-tag-small: var(--typo-component-tag-small-weight) var(--typo-component-tag-small-size)/var(--typo-component-tag-small-line-height) var(--typo-component-tag-small-family);
+}

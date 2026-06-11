@@ -1,0 +1,220 @@
+/* ====================================================================
+   global.css — Tier 1: Global Primitives
+   ====================================================================
+   The foundation layer. Defines all raw, brand-agnostic design values.
+   No other CDS file is required — this file has no dependencies.
+
+   Contains:
+     - Spacing scale        (--space-*)
+     - Size scale           (--size-*)
+     - Icon sizes           (--icon-size-*)
+     - Border radius        (--radius-*)
+     - Border width         (--border-width-*)
+     - Opacity              (--opacity-*)
+     - Text size scale      (--text-size-1 … --text-size-13)
+     - Line height scale    (--line-height-1 … --line-height-13)
+     - Letter spacing       (--letter-space-*)
+     - Paragraph spacing    (--paragraph-space-*)
+     - Global colors        (--color-global-green/amber/red/blue/grey-*)
+     - Base colors          (--color-base-white, --color-base-black)
+     - Elevation            (--elevation-level*)
+     - Platform font stack  (--platform-font-default, --platform-font-label)
+                            overridden per-platform by platform-*.css
+
+   Referenced by: all other CDS files
+   ==================================================================== */
+
+/* ---------- PRIMITIVES (brand- and platform-agnostic) ---------- */
+:root {
+  /* space */
+  --space-none: 0px;
+  --space-xxsmall: 2px;
+  --space-xsmall: 4px;
+  --space-small: 8px;
+  --space-medium: 12px;
+  --space-large: 16px;
+  --space-xlarge: 24px;
+  --space-xxlarge: 32px;
+  --space-xxxlarge: 48px;
+
+  /* size */
+  --size-1:  2px;
+  --size-2:  4px;
+  --size-3:  8px;
+  --size-4:  12px;
+  --size-5:  16px;
+  --size-6:  24px;
+  --size-7:  32px;
+  --size-8:  48px;
+  --size-9:  56px;
+  --size-10: 64px;
+  --size-11: 72px;
+  --size-12: 80px;
+  --size-13: 88px;
+
+  /* icon size */
+  --icon-size-small:   var(--size-5);   /* 16px */
+  --icon-size-medium:  var(--size-6);   /* 24px */
+  --icon-size-large:   var(--size-8);   /* 48px */
+  --icon-size-xlarge:  var(--size-10);  /* 64px */
+  --icon-size-xxlarge: var(--size-13);  /* 88px */
+
+  /* border radius */
+  --radius-none: 0px;
+  --radius-xsmall: 4px;
+  --radius-small: 8px;
+  --radius-medium: 12px;
+  --radius-large: 16px;
+  --radius-xlarge: 24px;
+  --radius-full: 999px;
+
+  /* border width */
+  --border-width-none: 0px;
+  --border-width-hairline: 0.5px;
+  --border-width-thin: 1px;
+  --border-width-thick: 2px;
+  --border-width-heavy: 4px;
+
+  /* opacity */
+  --opacity-transparent: 0;
+  --opacity-semiTransparent: 0.2;
+  --opacity-light: 0.4;
+  --opacity-medium: 0.6;
+  --opacity-semiSolid: 0.8;
+  --opacity-solid: 1;
+
+  /* type scale — size / line-height (pixels), letter-spacing (px) */
+  
+  /*text size */
+  --text-size-1: 11px;
+  --text-size-2: 12px;
+  --text-size-3: 13px;
+  --text-size-4: 14px;
+  --text-size-5: 15px;
+  --text-size-6: 17px;
+  --text-size-7: 20px;
+  --text-size-8: 22px;
+  --text-size-9: 28px;
+  --text-size-10: 34px;
+  --text-size-11: 40px;
+  --text-size-12: 64px;
+  --text-size-13: 128px;
+
+  /* line height */
+  --line-height-1: 13px;
+  --line-height-2: 16px;
+  --line-height-3: 18px;
+  --line-height-4: 20px;
+  --line-height-5: 21px;
+  --line-height-6: 22px;
+  --line-height-7: 25px;
+  --line-height-8: 28px;
+  --line-height-9: 34px;
+  --line-height-10: 41px;
+  --line-height-11: 48px;
+  --line-height-12: 76px;
+  --line-height-13: 132px;
+
+  /* letter spacing */
+  --letter-space-dense: -0.6px;
+  --letter-space-tight: -0.4px;
+  --letter-space-snug: -0.2px;
+  --letter-space-default: 0px;
+  --letter-space-relaxed: 0.2px;
+  --letter-space-loose: 0.4px;
+  --letter-space-editorial: 0.6px;
+
+  /* paragraph spacing */
+  --paragraph-space-none: 0px;
+  --paragraph-space-tight: 4px;
+  --paragraph-space-snug: 8px;
+  --paragraph-space-default: 16px;
+  --paragraph-space-relaxed: 24px;
+  --paragraph-space-loose: 32px;
+
+  /* global colors — shared across brands */
+ 
+  /* green */
+  --color-global-green-50: #cfffcf;
+  --color-global-green-100: #acffac;
+  --color-global-green-200: #8aff8a;
+  --color-global-green-300: #06ff2d;
+  --color-global-green-400: #00d51a;
+  --color-global-green-500: #00ab0b;
+  --color-global-green-600: #008101;
+  --color-global-green-700: #005700;
+  --color-global-green-800: #002d00;
+  --color-global-green-900: #000300;
+
+/* amber */
+  --color-global-amber-50: #fff4df;
+  --color-global-amber-100: #faca69;
+  --color-global-amber-200: #e7a727;
+  --color-global-amber-300: #c98a0a;
+  --color-global-amber-400: #aa750b;
+  --color-global-amber-500: #906308;
+  --color-global-amber-600: #755006;
+  --color-global-amber-700: #563b03;
+  --color-global-amber-800: #372502;
+  --color-global-amber-900: #150e00;
+
+ /* red */
+  --color-global-red-50: #ffeff1;
+  --color-global-red-100: #ffc1c9;
+  --color-global-red-200: #ff93a0;
+  --color-global-red-300: #f36b7c;
+  --color-global-red-400: #f4213c;
+  --color-global-red-500: #d80b25;
+  --color-global-red-600: #ab1326;
+  --color-global-red-700: #810414;
+  --color-global-red-800: #53030d;
+  --color-global-red-900: #280005;
+
+/* blue */
+  --color-global-blue-50: #e9f5ff;
+  --color-global-blue-100: #b1d7fe;
+  --color-global-blue-200: #7cbbff;
+  --color-global-blue-300: #409dfe;
+  --color-global-blue-400: #0780ff;
+  --color-global-blue-500: #006cde;
+  --color-global-blue-600: #0057b1;
+  --color-global-blue-700: #003f81;
+  --color-global-blue-800: #002852;
+  --color-global-blue-900: #000f1f;
+
+/* grey */
+  --color-global-grey-0: #ffffff;
+  --color-global-grey-50: #fafafa;
+  --color-global-grey-100: #f4f4f7;
+  --color-global-grey-200: #d0d0d2;
+  --color-global-grey-300: #b4b4b7;
+  --color-global-grey-400: #9a9a9d;
+  --color-global-grey-500: #818186;
+  --color-global-grey-600: #6e6e73;
+  --color-global-grey-700: #57575b;
+  --color-global-grey-800: #28282a;
+  --color-global-grey-900: #151515;
+  --color-global-grey-1000: #000000;
+
+  /* elevation — shadow stacks */
+  --elevation-level1: 0 4px 10px 0 rgba(0,0,0,0.06);
+  --elevation-level2: 0 6px 16px 0 rgba(0,0,0,0.08);
+  --elevation-level3: 0 6px 16px 0 rgba(0,0,0,0.16);
+
+  /* base */
+  --color-base-white: #ffffff;
+  --color-base-black: #000000;
+
+  /* default platform font stack (fallback only — overridden by platform-*.css
+     when the loader sets data-platform on <html>) */
+  --platform-font-default: "Noto Sans", system-ui, sans-serif;
+  --platform-font-label:   "Noto Sans"; /* Claude Design only — short font name for switcher UI display */
+
+  /* default platform font weights (overridden by platform-*.css if a
+     platform needs different numeric weights) */
+  --platform-font-weight-light:    300;
+  --platform-font-weight-regular:  400;
+  --platform-font-weight-medium:   500;
+  --platform-font-weight-semibold: 600;
+  --platform-font-weight-bold:     700;
+}

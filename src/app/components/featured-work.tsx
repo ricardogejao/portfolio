@@ -1,5 +1,6 @@
 import { ArrowRight, Lock } from "lucide-react";
 import { Reveal } from "./motion-primitives";
+const smartHomeBg = "https://github.com/ricardogejao/portfolio/releases/download/v1.0/smart-home-bg.mp4";
 
 type Props = {
   onOpenTelus?: () => void;
@@ -21,7 +22,7 @@ export function FeaturedWork({ onOpenTelus }: Props) {
       <Reveal delay={0.08}>
       <article
         onClick={onOpenTelus}
-        className="group relative bg-[#1A1A1A] text-white overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 cursor-pointer"
+        className="group relative bg-[#1A1A1A] text-white transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 cursor-pointer"
       >
         <div className="grid md:grid-cols-2 gap-0">
           <div className="p-8 md:p-16 flex flex-col justify-between min-h-[420px] md:min-h-[560px]">
@@ -64,33 +65,18 @@ export function FeaturedWork({ onOpenTelus }: Props) {
             </div>
           </div>
 
-          {/* Abstract device mockup */}
-          <div className="relative bg-[#161616] min-h-[320px] md:min-h-full overflow-hidden">
-            <div className="absolute inset-0 flex items-center justify-center p-12">
-              <div className="relative w-full max-w-[260px] aspect-[9/19] bg-[#0A0A0A] border border-white/10 rounded-[2.5rem] p-3 shadow-2xl transition-transform duration-300 group-hover:scale-[1.02]">
-                <div className="w-full h-full rounded-[2rem] bg-[#141414] p-5 flex flex-col gap-3">
-                  <div className="flex items-center justify-between">
-                    <div className="w-10 h-1.5 bg-white/20 rounded-full" />
-                    <div className="w-2 h-2 bg-white/40 rounded-full" />
-                  </div>
-                  <div className="mt-2">
-                    <div className="h-2 w-20 bg-white/30 rounded-full mb-2" />
-                    <div className="h-4 w-32 bg-white/80 rounded-sm" />
-                  </div>
-                  <div className="grid grid-cols-2 gap-2 mt-3">
-                    {[0, 1, 2, 3].map((i) => (
-                      <div
-                        key={i}
-                        className="aspect-square bg-white/[0.06] border border-white/10 rounded-xl flex items-end p-2"
-                      >
-                        <div className="w-6 h-1 bg-white/40 rounded-full" />
-                      </div>
-                    ))}
-                  </div>
-                  <div className="mt-auto h-12 bg-white/[0.06] border border-white/10 rounded-xl" />
-                </div>
-              </div>
-            </div>
+          {/* Device mockup with real screen */}
+          <div className="relative min-h-[320px] md:min-h-full overflow-hidden">
+            {/* Background video */}
+            <video
+              aria-hidden
+              src={smartHomeBg}
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+            />
           </div>
         </div>
       </article>
