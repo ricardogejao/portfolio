@@ -4,9 +4,10 @@ const smartHomeBg = "https://github.com/ricardogejao/portfolio/releases/download
 
 type Props = {
   onOpenTelus?: () => void;
+  onOpenIpsy?: () => void;
 };
 
-export function FeaturedWork({ onOpenTelus }: Props) {
+export function FeaturedWork({ onOpenTelus, onOpenIpsy }: Props) {
   return (
     <section id="work" className="bg-[#FAFAFA] text-[#111111] px-6 md:px-12 py-24 md:py-36">
       <Reveal>
@@ -84,42 +85,59 @@ export function FeaturedWork({ onOpenTelus }: Props) {
 
       {/* Smaller cards */}
       <div className="grid md:grid-cols-2 gap-6 md:gap-8 mt-6 md:mt-8">
-        {[
-          {
-            title: "IPSY",
-            desc: "Subscription growth and member lifecycle design",
-          },
-          {
-            title: "Intuit QuickBooks",
-            desc: "+12pp product usage through platform-level workflow redesign",
-          },
-        ].map((p, i) => (
-          <Reveal key={p.title} delay={0.16 + i * 0.1}>
+        {/* IPSY — live */}
+        <Reveal delay={0.16}>
           <article
-            className="group relative bg-white border border-[#111111]/10 p-8 md:p-12 min-h-[280px] flex flex-col justify-between transition-all duration-200 hover:-translate-y-1 hover:shadow-xl cursor-not-allowed"
+            onClick={onOpenIpsy}
+            className="group relative bg-white border border-[#111111]/10 p-8 md:p-12 min-h-[280px] flex flex-col justify-between transition-all duration-200 hover:-translate-y-1 hover:shadow-xl cursor-pointer"
           >
+            <div>
+              <span className="inline-block uppercase tracking-[0.22em] text-[#111111]/40 mb-6" style={{ fontSize: "11px" }}>
+                2023–2024
+              </span>
+              <h4 className="tracking-[-0.02em] mb-3" style={{ fontSize: "clamp(1.5rem, 2.6vw, 2rem)", fontWeight: 700 }}>
+                IPSY
+              </h4>
+              <p className="text-[#111111]/60 max-w-[36ch] leading-relaxed">
+                +14.7% subscription conversion through A/B testing and member lifecycle personalization.
+              </p>
+            </div>
+            <div className="mt-8 flex flex-wrap gap-2 items-end justify-between">
+              <div className="flex flex-wrap gap-2">
+                {["Research", "Conversion", "Personalization"].map((tag) => (
+                  <span key={tag} className="px-3 py-1.5 border border-[#111111]/12 text-[#111111]/50 tracking-tight" style={{ fontSize: "12px" }}>
+                    {tag}
+                  </span>
+                ))}
+              </div>
+              <span className="inline-flex items-center gap-2 border-b border-[#111111]/30 pb-0.5 group-hover:border-[#111111] transition-colors" style={{ fontSize: "13px" }}>
+                Read Case Study
+                <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
+              </span>
+            </div>
+          </article>
+        </Reveal>
+
+        {/* Intuit — coming soon */}
+        <Reveal delay={0.24}>
+          <article className="group relative bg-white border border-[#111111]/10 p-8 md:p-12 min-h-[280px] flex flex-col justify-between transition-all duration-200 hover:-translate-y-1 hover:shadow-xl cursor-not-allowed">
             <div className="absolute top-6 right-6 inline-flex items-center gap-2 px-3 py-1.5 bg-[#111111] text-white uppercase tracking-[0.18em]" style={{ fontSize: "10px" }}>
               <Lock className="w-3 h-3" />
               Coming Soon
             </div>
             <div>
-              <h4
-                className="tracking-[-0.02em] mb-3"
-                style={{ fontSize: "clamp(1.5rem, 2.6vw, 2rem)", fontWeight: 700 }}
-              >
-                {p.title}
+              <h4 className="tracking-[-0.02em] mb-3" style={{ fontSize: "clamp(1.5rem, 2.6vw, 2rem)", fontWeight: 700 }}>
+                Intuit QuickBooks
               </h4>
-              <p className="text-[#111111]/60 max-w-[36ch] leading-relaxed">{p.desc}</p>
+              <p className="text-[#111111]/60 max-w-[36ch] leading-relaxed">
+                +12pp product usage through platform-level workflow redesign
+              </p>
             </div>
-            <span
-              className="mt-8 uppercase tracking-[0.22em] text-[#111111]/40"
-              style={{ fontSize: "11px" }}
-            >
+            <span className="mt-8 uppercase tracking-[0.22em] text-[#111111]/40" style={{ fontSize: "11px" }}>
               Case study in progress
             </span>
           </article>
-          </Reveal>
-        ))}
+        </Reveal>
       </div>
     </section>
   );

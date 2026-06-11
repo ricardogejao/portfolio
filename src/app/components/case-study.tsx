@@ -5,7 +5,7 @@ import { motion, AnimatePresence, useInView, useScroll, useTransform } from "mot
 import { Footer } from "./footer";
 import { ScrollProgress } from "./scroll-progress";
 import { Reveal, SlideIn, ScaleIn } from "./motion-primitives";
-import caseHeroVideo from "../../imports/case-study-hero.mp4";
+const caseHeroVideo = "https://github.com/ricardogejao/portfolio/releases/download/v1.0/case-study-hero.mp4";
 import logoGejao from "../../imports/image-2.png";
 import productMockup from "../../imports/product-mockup.mov";
 import teamPhoto from "../../imports/team-photo.jpg";
