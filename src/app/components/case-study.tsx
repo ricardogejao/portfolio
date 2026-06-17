@@ -371,6 +371,7 @@ export function CaseStudy({ onBack }: Props) {
             loop
             playsInline
             className="w-full block opacity-80 pointer-events-none"
+            style={{ aspectRatio: "16/9", backgroundColor: "#111111" }}
           />
           <div aria-hidden className="absolute inset-0 bg-[#111111]/25 pointer-events-none" />
           {/* Cover Veo watermarks */}
