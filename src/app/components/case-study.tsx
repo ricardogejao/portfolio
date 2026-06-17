@@ -324,7 +324,32 @@ type Props = {
 
 const sectionLabel = "uppercase tracking-[0.22em]";
 
+// ─── Parallax helper ─────────────────────────────────────────
+function ParallaxY({
+  children,
+  offset = 30,
+  className = "",
+}: {
+  children: React.ReactNode;
+  offset?: number;
+  className?: string;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
+  const y = useTransform(scrollYProgress, [0, 1], [offset / 2, -offset / 2]);
+  return (
+    <motion.div ref={ref} style={{ y }} className={className}>
+      {children}
+    </motion.div>
+  );
+}
+
 export function CaseStudy({ onBack }: Props) {
+  // Hero video parallax
+  const heroRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress: heroScroll } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
+  const heroVideoY = useTransform(heroScroll, [0, 1], ["0%", "22%"]);
+
   return (
     <div className="w-full bg-[#FAFAFA]">
       <ScrollProgress />
@@ -362,17 +387,19 @@ export function CaseStudy({ onBack }: Props) {
       {/* HERO */}
       <section className="bg-[#111111] text-white">
         {/* Video with label + heading overlaid */}
-        <div className="relative">
-          <video
-            aria-hidden
-            src={caseHeroVideo}
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="w-full block opacity-80 pointer-events-none"
-            style={{ aspectRatio: "16/9", backgroundColor: "#111111" }}
-          />
+        <div ref={heroRef} className="relative overflow-hidden">
+          <motion.div style={{ y: heroVideoY, scale: 1.1 }} className="origin-top">
+            <video
+              aria-hidden
+              src={caseHeroVideo}
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="w-full block opacity-80 pointer-events-none"
+              style={{ aspectRatio: "16/9", backgroundColor: "#111111" }}
+            />
+          </motion.div>
           <div aria-hidden className="absolute inset-0 bg-[#111111]/25 pointer-events-none" />
           {/* Cover Veo watermarks */}
           <div aria-hidden className="absolute pointer-events-none" style={{ right: "5%", bottom: "10%", width: "12%", height: "20%", background: "radial-gradient(ellipse at center, #1d1e22 30%, transparent 75%)" }} />
@@ -420,7 +447,8 @@ export function CaseStudy({ onBack }: Props) {
             <div aria-hidden className="absolute inset-0 pointer-events-none z-0" style={{ background: "radial-gradient(ellipse 90% 70% at 50% 100%, rgba(78,22,128,0.35) 0%, rgba(50,10,90,0.15) 40%, transparent 70%)" }} />
             {/* subtle gradient fade at bottom */}
             <div className="absolute bottom-0 inset-x-0 h-10 bg-gradient-to-t from-[#1c1c1e]/60 to-transparent z-10 pointer-events-none" />
-            <div className="absolute inset-0 flex items-end justify-center gap-3 md:gap-6 pb-0" style={{ paddingLeft: "5%", paddingRight: "5%" }}>
+            <ParallaxY offset={18} className="absolute inset-0">
+            <div className="w-full h-full flex items-end justify-center gap-3 md:gap-6 pb-0" style={{ paddingLeft: "5%", paddingRight: "5%" }}>
 
               {[
                 { src: screenHome,    alt: "Home screen",    offset: 80 },
@@ -449,6 +477,7 @@ export function CaseStudy({ onBack }: Props) {
               ))}
 
             </div>
+            </ParallaxY>
           </div>
         </div>
       </section>
@@ -639,12 +668,14 @@ export function CaseStudy({ onBack }: Props) {
           {/* Right — team photo */}
           <div className="flex flex-col gap-3">
             <div className="overflow-hidden">
-              <img
-                src={teamPhoto}
-                alt="TELUS SmartHome+ design team"
-                className="w-full object-cover grayscale contrast-[1.05]"
-                style={{ aspectRatio: "4/3" }}
-              />
+              <ParallaxY offset={25}>
+                <img
+                  src={teamPhoto}
+                  alt="TELUS SmartHome+ design team"
+                  className="w-full object-cover grayscale contrast-[1.05] scale-[1.05]"
+                  style={{ aspectRatio: "4/3" }}
+                />
+              </ParallaxY>
             </div>
             <p className={`${sectionLabel} text-[#111111]/35`} style={{ fontSize: "10px" }}>
               TELUS SmartHome+ design team — Vancouver, 2025
