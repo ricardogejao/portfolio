@@ -484,13 +484,15 @@ export function CaseStudy({ onBack }: Props) {
 
       {/* PULL QUOTE */}
       <section className="relative bg-[#111111] text-white px-6 md:px-12 py-28 md:py-44">
-        <blockquote
-          className="max-w-[28ch] mx-auto text-center italic text-white tracking-[-0.015em] leading-[1.2]"
-          style={{ fontSize: "clamp(1.75rem, 4.2vw, 3.25rem)", fontWeight: 400 }}
-        >
-          "TELUS had a product that worked and a platform that couldn't scale.
-          My job was to fix the layer underneath — before the product outgrew it."
-        </blockquote>
+        <ParallaxY offset={40}>
+          <blockquote
+            className="max-w-[28ch] mx-auto text-center italic text-white tracking-[-0.015em] leading-[1.2]"
+            style={{ fontSize: "clamp(1.75rem, 4.2vw, 3.25rem)", fontWeight: 400 }}
+          >
+            "TELUS had a product that worked and a platform that couldn't scale.
+            My job was to fix the layer underneath — before the product outgrew it."
+          </blockquote>
+        </ParallaxY>
       </section>
 
       {/* 01 CONTEXT */}
@@ -515,14 +517,16 @@ export function CaseStudy({ onBack }: Props) {
           </div>
           <div className="flex items-center justify-center">
             <div className="w-[46%] overflow-hidden pb-6">
-              <video
-                src={productMockup}
-                autoPlay
-                muted
-                loop
-                playsInline
-                className="block w-full scale-[1.1]"
-              />
+              <ParallaxY offset={35}>
+                <video
+                  src={productMockup}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className="block w-full scale-[1.1]"
+                />
+              </ParallaxY>
             </div>
           </div>
         </div>
@@ -534,13 +538,15 @@ export function CaseStudy({ onBack }: Props) {
           02 · The Problem
         </p>
 
-        <h2
-          className="tracking-[-0.025em] leading-[1.04] max-w-[22ch] mb-20 md:mb-28"
-          style={{ fontSize: "clamp(2rem, 5.5vw, 4.25rem)", fontWeight: 700 }}
-        >
-          The problem was not a missing feature. It was a fragmented system that had
-          grown beyond what its architecture could support.
-        </h2>
+        <ParallaxY offset={30}>
+          <h2
+            className="tracking-[-0.025em] leading-[1.04] max-w-[22ch] mb-20 md:mb-28"
+            style={{ fontSize: "clamp(2rem, 5.5vw, 4.25rem)", fontWeight: 700 }}
+          >
+            The problem was not a missing feature. It was a fragmented system that had
+            grown beyond what its architecture could support.
+          </h2>
+        </ParallaxY>
 
         <div className="grid md:grid-cols-2 gap-px bg-[#2A2A2A]">
           {[
@@ -719,8 +725,10 @@ export function CaseStudy({ onBack }: Props) {
                 Before · Device-Centric
               </span>
             </div>
-            <div className="flex justify-center px-12 py-8 h-[460px]">
-              <img src={sduiBeforeLight} alt="Light bulb before SDUI" className="h-full object-contain" />
+            <div className="flex justify-center px-12 py-8 h-[460px] overflow-hidden">
+              <ParallaxY offset={45}>
+                <img src={sduiBeforeLight} alt="Light bulb before SDUI" className="h-full object-contain" />
+              </ParallaxY>
             </div>
             <p className="px-8 py-6 text-white/55 leading-relaxed border-t border-white/10" style={{ fontSize: "0.875rem" }}>
               Each device had its own custom UI. No shared model, no reuse.
@@ -737,8 +745,10 @@ export function CaseStudy({ onBack }: Props) {
                 After · Capability-Centric (SDUI)
               </span>
             </div>
-            <div className="flex justify-center px-12 py-8 h-[460px]">
-              <img src={sduiAfterLight} alt="Light bulb after SDUI" className="h-full object-contain" />
+            <div className="flex justify-center px-12 py-8 h-[460px] overflow-hidden">
+              <ParallaxY offset={45}>
+                <img src={sduiAfterLight} alt="Light bulb after SDUI" className="h-full object-contain" />
+              </ParallaxY>
             </div>
             <p className="px-8 py-6 text-white/75 leading-relaxed border-t border-white/10" style={{ fontSize: "0.875rem" }}>
               Capabilities drive the UI — any device, same framework.
@@ -910,20 +920,22 @@ export function CaseStudy({ onBack }: Props) {
             </p>
             {(() => {
               const screens = [
-                { src: homeAway01, label: "Away state", sub: "Home screen adapts — cameras + sensors surfaced" },
-                { src: homeAway02, label: "Smart notifications", sub: "Away active, Home quieter — critical always on" },
-                { src: homeAway03, label: "Home occupancy", sub: "One tap to switch — simple mental model" },
-                { src: homeAway04, label: "State confirmed", sub: "Contextual toast — zero friction feedback" },
+                { src: homeAway01, label: "Away state", sub: "Home screen adapts — cameras + sensors surfaced", pOffset: 20 },
+                { src: homeAway02, label: "Smart notifications", sub: "Away active, Home quieter — critical always on", pOffset: 35 },
+                { src: homeAway03, label: "Home occupancy", sub: "One tap to switch — simple mental model", pOffset: 15 },
+                { src: homeAway04, label: "State confirmed", sub: "Contextual toast — zero friction feedback", pOffset: 30 },
               ];
               return (
                 <>
                   {/* Images + arrows row */}
                   <div className="flex items-center">
-                    {screens.map(({ src, label }, i) => (
+                    {screens.map(({ src, label, pOffset }, i) => (
                       <>
                         <Reveal key={label} delay={i * 0.08} y={20} className="flex-1 min-w-0">
                           <div className="w-full aspect-[9/19] overflow-hidden">
-                            <img src={src} alt={label} className="w-full h-full object-contain" />
+                            <ParallaxY offset={pOffset}>
+                              <img src={src} alt={label} className="w-full h-full object-contain" />
+                            </ParallaxY>
                           </div>
                         </Reveal>
                         {i < screens.length - 1 && (
@@ -1250,6 +1262,7 @@ export function CaseStudy({ onBack }: Props) {
 
         {/* André quote — section closer */}
         <div className="py-24 md:py-32 text-center border-t border-[#111111]/10">
+          <ParallaxY offset={35}>
           <blockquote className="mx-auto" style={{ maxWidth: "760px" }}>
             <p
               className="leading-[1.1] text-[#111111]"
@@ -1277,6 +1290,7 @@ export function CaseStudy({ onBack }: Props) {
               André Bernardi · VP Product, TELUS · after Vancouver workshop
             </p>
           </blockquote>
+          </ParallaxY>
         </div>
 
       </section>
