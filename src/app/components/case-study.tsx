@@ -1,7 +1,7 @@
 import { ArrowLeft, ArrowRight, Check } from "lucide-react";
 import { GenUIEmbed } from "./genui-embed";
 import { useRef, useState, useCallback, useEffect, type ReactNode } from "react";
-import { motion, AnimatePresence, useInView, useScroll, useTransform } from "motion/react";
+import { motion, AnimatePresence, useInView, useScroll, useTransform, useMotionValue } from "motion/react";
 import { Footer } from "./footer";
 import { ScrollProgress } from "./scroll-progress";
 import { Reveal, SlideIn, ScaleIn } from "./motion-primitives";
@@ -325,6 +325,7 @@ type Props = {
 const sectionLabel = "uppercase tracking-[0.22em]";
 
 // ─── Parallax helper ─────────────────────────────────────────
+// Uses raw scroll event listener — reliable in any SPA/AnimatePresence context
 function ParallaxY({
   children,
   offset = 30,
@@ -335,24 +336,23 @@ function ParallaxY({
   className?: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const { scrollY } = useScroll();
-  const [range, setRange] = useState<[number, number]>([0, 1]);
+  const y = useMotionValue(0);
 
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const update = () => {
+    const onScroll = () => {
+      const el = ref.current;
+      if (!el) return;
       const rect = el.getBoundingClientRect();
-      const top = rect.top + window.scrollY;
       const vh = window.innerHeight;
-      setRange([top - vh, top + rect.height]);
+      // progress 0 → 1 as element travels from bottom of viewport to top
+      const progress = 1 - rect.bottom / (vh + rect.height);
+      const clamped = Math.max(0, Math.min(1, progress));
+      y.set((clamped - 0.5) * -offset);
     };
-    update();
-    window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
-  }, []);
-
-  const y = useTransform(scrollY, range, [offset / 2, -offset / 2]);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [offset, y]);
 
   return (
     <motion.div ref={ref} style={{ y }} className={className}>
@@ -362,24 +362,23 @@ function ParallaxY({
 }
 
 export function CaseStudy({ onBack }: Props) {
-  // Hero video parallax — uses window scrollY directly (reliable in SPA)
+  // Hero video parallax — raw scroll event
   const heroRef = useRef<HTMLDivElement>(null);
-  const { scrollY } = useScroll();
-  const [heroRange, setHeroRange] = useState<[number, number]>([0, 1]);
+  const heroVideoY = useMotionValue("0%");
 
   useEffect(() => {
-    const el = heroRef.current;
-    if (!el) return;
-    const update = () => {
+    const onScroll = () => {
+      const el = heroRef.current;
+      if (!el) return;
       const rect = el.getBoundingClientRect();
-      setHeroRange([0, rect.height]);
+      // progress 0→1 as hero scrolls off screen upward
+      const progress = Math.max(0, Math.min(1, -rect.top / rect.height));
+      heroVideoY.set(`${progress * 22}%`);
     };
-    update();
-    window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
-  }, []);
-
-  const heroVideoY = useTransform(scrollY, heroRange, ["0%", "22%"]);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [heroVideoY]);
 
   return (
     <div className="w-full bg-[#FAFAFA]">
