@@ -335,8 +335,25 @@ function ParallaxY({
   className?: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const y = useTransform(scrollYProgress, [0, 1], [offset / 2, -offset / 2]);
+  const { scrollY } = useScroll();
+  const [range, setRange] = useState<[number, number]>([0, 1]);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const update = () => {
+      const rect = el.getBoundingClientRect();
+      const top = rect.top + window.scrollY;
+      const vh = window.innerHeight;
+      setRange([top - vh, top + rect.height]);
+    };
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+
+  const y = useTransform(scrollY, range, [offset / 2, -offset / 2]);
+
   return (
     <motion.div ref={ref} style={{ y }} className={className}>
       {children}
@@ -345,10 +362,24 @@ function ParallaxY({
 }
 
 export function CaseStudy({ onBack }: Props) {
-  // Hero video parallax
+  // Hero video parallax — uses window scrollY directly (reliable in SPA)
   const heroRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress: heroScroll } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
-  const heroVideoY = useTransform(heroScroll, [0, 1], ["0%", "22%"]);
+  const { scrollY } = useScroll();
+  const [heroRange, setHeroRange] = useState<[number, number]>([0, 1]);
+
+  useEffect(() => {
+    const el = heroRef.current;
+    if (!el) return;
+    const update = () => {
+      const rect = el.getBoundingClientRect();
+      setHeroRange([0, rect.height]);
+    };
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+
+  const heroVideoY = useTransform(scrollY, heroRange, ["0%", "22%"]);
 
   return (
     <div className="w-full bg-[#FAFAFA]">
